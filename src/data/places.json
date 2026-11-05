@@ -1,0 +1,1722 @@
+[
+  {
+    "id": "72001",
+    "name": "Adjuntas",
+    "lat": 18.181611,
+    "lon": -66.758165,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25001",
+    "name": "Agua De Dios",
+    "lat": 4.375309,
+    "lon": -74.669221,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72003",
+    "name": "Aguada",
+    "lat": 18.375641,
+    "lon": -67.185727,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72005",
+    "name": "Aguadilla",
+    "lat": 18.480191,
+    "lon": -67.143762,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72007",
+    "name": "Aguas Buenas",
+    "lat": 18.256524,
+    "lon": -66.128496,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72009",
+    "name": "Aibonito",
+    "lat": 18.130723,
+    "lon": -66.26446,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25019",
+    "name": "Albán",
+    "lat": 4.878022,
+    "lon": -74.438261,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25035",
+    "name": "Anapoima",
+    "lat": 4.562737,
+    "lon": -74.528676,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25040",
+    "name": "Anolaima",
+    "lat": 4.7617,
+    "lon": -74.46384,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-15",
+    "name": "Antonio Nariño · Bogotá",
+    "lat": 4.589,
+    "lon": -74.102,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25599",
+    "name": "Apulo",
+    "lat": 4.520304,
+    "lon": -74.593926,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25053",
+    "name": "Arbeláez",
+    "lat": 4.272534,
+    "lon": -74.414901,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72013",
+    "name": "Arecibo",
+    "lat": 18.434004,
+    "lon": -66.674994,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72015",
+    "name": "Arroyo",
+    "lat": 17.97206,
+    "lon": -66.041945,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72011",
+    "name": "Añasco",
+    "lat": 18.286905,
+    "lon": -67.131282,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72017",
+    "name": "Barceloneta",
+    "lat": 18.469997,
+    "lon": -66.558226,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72019",
+    "name": "Barranquitas",
+    "lat": 18.200018,
+    "lon": -66.309282,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-12",
+    "name": "Barrios Unidos · Bogotá",
+    "lat": 4.671,
+    "lon": -74.074,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72021",
+    "name": "Bayamón",
+    "lat": 18.34942,
+    "lon": -66.168626,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25086",
+    "name": "Beltrán",
+    "lat": 4.802832,
+    "lon": -74.741666,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25095",
+    "name": "Bituima",
+    "lat": 4.872171,
+    "lon": -74.539609,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "11001",
+    "name": "Bogotá, D.C.",
+    "lat": 4.649251,
+    "lon": -74.106992,
+    "region": "co",
+    "kind": "Distrito"
+  },
+  {
+    "id": "25099",
+    "name": "Bojacá",
+    "lat": 4.737205,
+    "lon": -74.344594,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-07",
+    "name": "Bosa · Bogotá",
+    "lat": 4.616,
+    "lon": -74.195,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72023",
+    "name": "Cabo Rojo",
+    "lat": 17.997138,
+    "lon": -67.180862,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25120",
+    "name": "Cabrera",
+    "lat": 3.985164,
+    "lon": -74.484549,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25123",
+    "name": "Cachipay",
+    "lat": 4.730957,
+    "lon": -74.435711,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72025",
+    "name": "Caguas",
+    "lat": 18.211109,
+    "lon": -66.050964,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25126",
+    "name": "Cajicá",
+    "lat": 4.920009,
+    "lon": -74.02298,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72027",
+    "name": "Camuy",
+    "lat": 18.445469,
+    "lon": -66.863134,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72029",
+    "name": "Canóvanas",
+    "lat": 18.330007,
+    "lon": -65.886035,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25148",
+    "name": "Caparrapí",
+    "lat": 5.34758,
+    "lon": -74.491045,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25154",
+    "name": "Carmen De Carupa",
+    "lat": 5.349119,
+    "lon": -73.901357,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72031",
+    "name": "Carolina",
+    "lat": 18.396776,
+    "lon": -65.968778,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72033",
+    "name": "Cataño",
+    "lat": 18.444614,
+    "lon": -66.148819,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72035",
+    "name": "Cayey",
+    "lat": 18.103624,
+    "lon": -66.151667,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72037",
+    "name": "Ceiba",
+    "lat": 18.253265,
+    "lon": -65.620765,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25168",
+    "name": "Chaguaní",
+    "lat": 4.948916,
+    "lon": -74.593455,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-02",
+    "name": "Chapinero · Bogotá",
+    "lat": 4.647,
+    "lon": -74.049,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25178",
+    "name": "Chipaque",
+    "lat": 4.442671,
+    "lon": -74.044876,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25181",
+    "name": "Choachí",
+    "lat": 4.527048,
+    "lon": -73.922894,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25183",
+    "name": "Chocontá",
+    "lat": 5.145224,
+    "lon": -73.683533,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25175",
+    "name": "Chía",
+    "lat": 4.866508,
+    "lon": -74.05,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72039",
+    "name": "Ciales",
+    "lat": 18.295913,
+    "lon": -66.515588,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72041",
+    "name": "Cidra",
+    "lat": 18.174391,
+    "lon": -66.161618,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-19",
+    "name": "Ciudad Bolívar · Bogotá",
+    "lat": 4.507,
+    "lon": -74.158,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72043",
+    "name": "Coamo",
+    "lat": 18.1038,
+    "lon": -66.357586,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25200",
+    "name": "Cogua",
+    "lat": 5.061842,
+    "lon": -73.978497,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72045",
+    "name": "Comerío",
+    "lat": 18.225032,
+    "lon": -66.219481,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72047",
+    "name": "Corozal",
+    "lat": 18.30391,
+    "lon": -66.326179,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25214",
+    "name": "Cota",
+    "lat": 4.812564,
+    "lon": -74.102569,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25224",
+    "name": "Cucunubá",
+    "lat": 5.249795,
+    "lon": -73.766113,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72049",
+    "name": "Culebra",
+    "lat": 18.326611,
+    "lon": -65.307771,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25151",
+    "name": "Cáqueza",
+    "lat": 4.404112,
+    "lon": -73.946473,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72051",
+    "name": "Dorado",
+    "lat": 18.474376,
+    "lon": -66.261973,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25245",
+    "name": "El Colegio",
+    "lat": 4.577951,
+    "lon": -74.442261,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25258",
+    "name": "El Peñón",
+    "lat": 5.248747,
+    "lon": -74.290207,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25260",
+    "name": "El Rosal",
+    "lat": 4.850589,
+    "lon": -74.263103,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-10",
+    "name": "Engativá · Bogotá",
+    "lat": 4.708,
+    "lon": -74.111,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25269",
+    "name": "Facatativá",
+    "lat": 4.813353,
+    "lon": -74.350085,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72053",
+    "name": "Fajardo",
+    "lat": 18.386378,
+    "lon": -65.588454,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72054",
+    "name": "Florida",
+    "lat": 18.36868,
+    "lon": -66.562711,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-09",
+    "name": "Fontibón · Bogotá",
+    "lat": 4.681,
+    "lon": -74.148,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25281",
+    "name": "Fosca",
+    "lat": 4.339093,
+    "lon": -73.93902,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25286",
+    "name": "Funza",
+    "lat": 4.710412,
+    "lon": -74.201528,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25290",
+    "name": "Fusagasugá",
+    "lat": 4.336723,
+    "lon": -74.37543,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25279",
+    "name": "Fómeque",
+    "lat": 4.485474,
+    "lon": -73.892523,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25288",
+    "name": "Fúquene",
+    "lat": 5.403997,
+    "lon": -73.795855,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25293",
+    "name": "Gachalá",
+    "lat": 4.693579,
+    "lon": -73.520161,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25295",
+    "name": "Gachancipá",
+    "lat": 4.990947,
+    "lon": -73.873464,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25297",
+    "name": "Gachetá",
+    "lat": 4.816411,
+    "lon": -73.636377,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25299",
+    "name": "Gama",
+    "lat": 4.763325,
+    "lon": -73.611037,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25307",
+    "name": "Girardot",
+    "lat": 4.313069,
+    "lon": -74.798201,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25312",
+    "name": "Granada",
+    "lat": 4.519763,
+    "lon": -74.350766,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25317",
+    "name": "Guachetá",
+    "lat": 5.383378,
+    "lon": -73.686972,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25320",
+    "name": "Guaduas",
+    "lat": 5.072076,
+    "lon": -74.603402,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25322",
+    "name": "Guasca",
+    "lat": 4.866719,
+    "lon": -73.877143,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25324",
+    "name": "Guataquí",
+    "lat": 4.517517,
+    "lon": -74.790058,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25326",
+    "name": "Guatavita",
+    "lat": 4.935211,
+    "lon": -73.83293,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25328",
+    "name": "Guayabal De Síquima",
+    "lat": 4.877968,
+    "lon": -74.467437,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25335",
+    "name": "Guayabetal",
+    "lat": 4.215306,
+    "lon": -73.815107,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72057",
+    "name": "Guayama",
+    "lat": 17.973929,
+    "lon": -66.137467,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72059",
+    "name": "Guayanilla",
+    "lat": 18.005338,
+    "lon": -66.798293,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72061",
+    "name": "Guaynabo",
+    "lat": 18.344357,
+    "lon": -66.114056,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72063",
+    "name": "Gurabo",
+    "lat": 18.272581,
+    "lon": -65.981177,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25339",
+    "name": "Gutiérrez",
+    "lat": 4.254679,
+    "lon": -74.003042,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72055",
+    "name": "Guánica",
+    "lat": 17.948209,
+    "lon": -66.922935,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72065",
+    "name": "Hatillo",
+    "lat": 18.441141,
+    "lon": -66.79821,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72067",
+    "name": "Hormigueros",
+    "lat": 18.134695,
+    "lon": -67.116199,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72069",
+    "name": "Humacao",
+    "lat": 18.135403,
+    "lon": -65.786229,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72071",
+    "name": "Isabela",
+    "lat": 18.483997,
+    "lon": -67.013979,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72073",
+    "name": "Jayuya",
+    "lat": 18.211152,
+    "lon": -66.58687,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25368",
+    "name": "Jerusalén",
+    "lat": 4.562273,
+    "lon": -74.695474,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72075",
+    "name": "Juana Díaz",
+    "lat": 17.997974,
+    "lon": -66.490496,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72077",
+    "name": "Juncos",
+    "lat": 18.224133,
+    "lon": -65.908542,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25372",
+    "name": "Junín",
+    "lat": 4.79057,
+    "lon": -73.662961,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-08",
+    "name": "Kennedy · Bogotá",
+    "lat": 4.626,
+    "lon": -74.151,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25377",
+    "name": "La Calera",
+    "lat": 4.721104,
+    "lon": -73.968161,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-17",
+    "name": "La Candelaria · Bogotá",
+    "lat": 4.596,
+    "lon": -74.073,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25386",
+    "name": "La Mesa",
+    "lat": 4.631028,
+    "lon": -74.461588,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25394",
+    "name": "La Palma",
+    "lat": 5.358816,
+    "lon": -74.391022,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25398",
+    "name": "La Peña",
+    "lat": 5.198945,
+    "lon": -74.394105,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25402",
+    "name": "La Vega",
+    "lat": 4.997768,
+    "lon": -74.336885,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72079",
+    "name": "Lajas",
+    "lat": 17.978511,
+    "lon": -67.040111,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72081",
+    "name": "Lares",
+    "lat": 18.276925,
+    "lon": -66.869587,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72083",
+    "name": "Las Marías",
+    "lat": 18.227594,
+    "lon": -66.97758,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72085",
+    "name": "Las Piedras",
+    "lat": 18.187152,
+    "lon": -65.871194,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25407",
+    "name": "Lenguazaque",
+    "lat": 5.306131,
+    "lon": -73.711512,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-14",
+    "name": "Los Mártires · Bogotá",
+    "lat": 4.605,
+    "lon": -74.091,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72087",
+    "name": "Loíza",
+    "lat": 18.445503,
+    "lon": -65.942649,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72089",
+    "name": "Luquillo",
+    "lat": 18.367996,
+    "lon": -65.709904,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25426",
+    "name": "Machetá",
+    "lat": 5.08007,
+    "lon": -73.608226,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25430",
+    "name": "Madrid",
+    "lat": 4.732791,
+    "lon": -74.265854,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72091",
+    "name": "Manatí",
+    "lat": 18.444803,
+    "lon": -66.493137,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25436",
+    "name": "Manta",
+    "lat": 5.009008,
+    "lon": -73.540444,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72093",
+    "name": "Maricao",
+    "lat": 18.173956,
+    "lon": -66.935547,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72095",
+    "name": "Maunabo",
+    "lat": 17.999786,
+    "lon": -65.896403,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72097",
+    "name": "Mayagüez",
+    "lat": 18.08385,
+    "lon": -67.886337,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25438",
+    "name": "Medina",
+    "lat": 4.506298,
+    "lon": -73.348449,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72099",
+    "name": "Moca",
+    "lat": 18.377637,
+    "lon": -67.079574,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72101",
+    "name": "Morovis",
+    "lat": 18.318017,
+    "lon": -66.420392,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25473",
+    "name": "Mosquera",
+    "lat": 4.70653,
+    "lon": -74.221154,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72103",
+    "name": "Naguabo",
+    "lat": 18.21107,
+    "lon": -65.735749,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72105",
+    "name": "Naranjito",
+    "lat": 18.28992,
+    "lon": -66.25344,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25483",
+    "name": "Nariño",
+    "lat": 4.399837,
+    "lon": -74.824732,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25486",
+    "name": "Nemocón",
+    "lat": 5.068705,
+    "lon": -73.877888,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25488",
+    "name": "Nilo",
+    "lat": 4.305838,
+    "lon": -74.620009,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25489",
+    "name": "Nimaima",
+    "lat": 5.125992,
+    "lon": -74.38604,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25491",
+    "name": "Nocaima",
+    "lat": 5.069466,
+    "lon": -74.379093,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72107",
+    "name": "Orocovis",
+    "lat": 18.218733,
+    "lon": -66.436899,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25513",
+    "name": "Pacho",
+    "lat": 5.136907,
+    "lon": -74.156132,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25518",
+    "name": "Paime",
+    "lat": 5.370487,
+    "lon": -74.152213,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25524",
+    "name": "Pandi",
+    "lat": 4.190393,
+    "lon": -74.486641,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25530",
+    "name": "Paratebueno",
+    "lat": 4.374832,
+    "lon": -73.212825,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25535",
+    "name": "Pasca",
+    "lat": 4.308979,
+    "lon": -74.302276,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72109",
+    "name": "Patillas",
+    "lat": 18.000311,
+    "lon": -65.986642,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72111",
+    "name": "Peñuelas",
+    "lat": 18.026618,
+    "lon": -66.728125,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72113",
+    "name": "Ponce",
+    "lat": 18.001717,
+    "lon": -66.606662,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-16",
+    "name": "Puente Aranda · Bogotá",
+    "lat": 4.617,
+    "lon": -74.119,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25572",
+    "name": "Puerto Salgar",
+    "lat": 5.465413,
+    "lon": -74.653695,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25580",
+    "name": "Pulí",
+    "lat": 4.682022,
+    "lon": -74.71438,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25592",
+    "name": "Quebradanegra",
+    "lat": 5.118076,
+    "lon": -74.48014,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72115",
+    "name": "Quebradillas",
+    "lat": 18.466357,
+    "lon": -66.927603,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25594",
+    "name": "Quetame",
+    "lat": 4.329884,
+    "lon": -73.863214,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25596",
+    "name": "Quipile",
+    "lat": 4.74481,
+    "lon": -74.533705,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-18",
+    "name": "Rafael Uribe Uribe · Bogotá",
+    "lat": 4.565,
+    "lon": -74.115,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25612",
+    "name": "Ricaurte",
+    "lat": 4.282113,
+    "lon": -74.772861,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72117",
+    "name": "Rincón",
+    "lat": 18.33898,
+    "lon": -67.250771,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72119",
+    "name": "Río Grande",
+    "lat": 18.376369,
+    "lon": -65.798434,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72121",
+    "name": "Sabana Grande",
+    "lat": 18.084483,
+    "lon": -66.947609,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72123",
+    "name": "Salinas",
+    "lat": 17.971485,
+    "lon": -66.262252,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25645",
+    "name": "San Antonio Del Tequendama",
+    "lat": 4.616138,
+    "lon": -74.351443,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25649",
+    "name": "San Bernardo",
+    "lat": 4.179433,
+    "lon": -74.42296,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25653",
+    "name": "San Cayetano",
+    "lat": 5.332938,
+    "lon": -74.024754,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-04",
+    "name": "San Cristóbal · Bogotá",
+    "lat": 4.548,
+    "lon": -74.084,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25658",
+    "name": "San Francisco",
+    "lat": 4.972917,
+    "lon": -74.289672,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72125",
+    "name": "San Germán",
+    "lat": 18.1078,
+    "lon": -67.037263,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72127",
+    "name": "San Juan",
+    "lat": 18.422249,
+    "lon": -66.069081,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25662",
+    "name": "San Juan De Rioseco",
+    "lat": 4.847575,
+    "lon": -74.621919,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72129",
+    "name": "San Lorenzo",
+    "lat": 18.147107,
+    "lon": -65.976167,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72131",
+    "name": "San Sebastián",
+    "lat": 18.331064,
+    "lon": -66.969064,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-03",
+    "name": "Santa Fe · Bogotá",
+    "lat": 4.596,
+    "lon": -74.03,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72133",
+    "name": "Santa Isabel",
+    "lat": 17.952922,
+    "lon": -66.387588,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25718",
+    "name": "Sasaima",
+    "lat": 4.962167,
+    "lon": -74.432628,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25736",
+    "name": "Sesquilé",
+    "lat": 5.04476,
+    "lon": -73.796099,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25740",
+    "name": "Sibaté",
+    "lat": 4.492625,
+    "lon": -74.257874,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25743",
+    "name": "Silvania",
+    "lat": 4.381981,
+    "lon": -74.405534,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25745",
+    "name": "Simijaca",
+    "lat": 5.505231,
+    "lon": -73.850703,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25754",
+    "name": "Soacha",
+    "lat": 4.579268,
+    "lon": -74.215463,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25758",
+    "name": "Sopó",
+    "lat": 4.915395,
+    "lon": -73.943328,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-11",
+    "name": "Suba · Bogotá",
+    "lat": 4.752,
+    "lon": -74.092,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25769",
+    "name": "Subachoque",
+    "lat": 4.929118,
+    "lon": -74.172773,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25772",
+    "name": "Suesca",
+    "lat": 5.103495,
+    "lon": -73.798227,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-20",
+    "name": "Sumapaz · Bogotá",
+    "lat": 4.035,
+    "lon": -74.315,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25777",
+    "name": "Supatá",
+    "lat": 5.06162,
+    "lon": -74.235403,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25779",
+    "name": "Susa",
+    "lat": 5.455291,
+    "lon": -73.813938,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25781",
+    "name": "Sutatausa",
+    "lat": 5.247482,
+    "lon": -73.853159,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25785",
+    "name": "Tabio",
+    "lat": 4.916832,
+    "lon": -74.096461,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25793",
+    "name": "Tausa",
+    "lat": 5.196333,
+    "lon": -73.887813,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25797",
+    "name": "Tena",
+    "lat": 4.655286,
+    "lon": -74.389193,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25799",
+    "name": "Tenjo",
+    "lat": 4.872014,
+    "lon": -74.143724,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-13",
+    "name": "Teusaquillo · Bogotá",
+    "lat": 4.646,
+    "lon": -74.093,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25805",
+    "name": "Tibacuy",
+    "lat": 4.348605,
+    "lon": -74.452662,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25807",
+    "name": "Tibirita",
+    "lat": 5.052278,
+    "lon": -73.504514,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72135",
+    "name": "Toa Alta",
+    "lat": 18.364556,
+    "lon": -66.244669,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72137",
+    "name": "Toa Baja",
+    "lat": 18.45691,
+    "lon": -66.193193,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25815",
+    "name": "Tocaima",
+    "lat": 4.459279,
+    "lon": -74.636296,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25817",
+    "name": "Tocancipá",
+    "lat": 4.964641,
+    "lon": -73.91207,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25823",
+    "name": "Topaipí",
+    "lat": 5.336224,
+    "lon": -74.300626,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72139",
+    "name": "Trujillo Alto",
+    "lat": 18.335387,
+    "lon": -66.003787,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-06",
+    "name": "Tunjuelito · Bogotá",
+    "lat": 4.571,
+    "lon": -74.132,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "25839",
+    "name": "Ubalá",
+    "lat": 4.74762,
+    "lon": -73.531489,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25841",
+    "name": "Ubaque",
+    "lat": 4.483788,
+    "lon": -73.933477,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25845",
+    "name": "Une",
+    "lat": 4.40245,
+    "lon": -74.025183,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "bog-01",
+    "name": "Usaquén · Bogotá",
+    "lat": 4.748,
+    "lon": -74.031,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "bog-05",
+    "name": "Usme · Bogotá",
+    "lat": 4.479,
+    "lon": -74.126,
+    "region": "co",
+    "kind": "Localidad · punto aproximado"
+  },
+  {
+    "id": "72141",
+    "name": "Utuado",
+    "lat": 18.270865,
+    "lon": -66.702989,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72143",
+    "name": "Vega Alta",
+    "lat": 18.43622,
+    "lon": -66.336412,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72145",
+    "name": "Vega Baja",
+    "lat": 18.455128,
+    "lon": -66.397883,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25506",
+    "name": "Venecia",
+    "lat": 4.089056,
+    "lon": -74.478301,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25862",
+    "name": "Vergara",
+    "lat": 5.117258,
+    "lon": -74.346163,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25867",
+    "name": "Vianí",
+    "lat": 4.875208,
+    "lon": -74.56132,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72147",
+    "name": "Vieques",
+    "lat": 18.125418,
+    "lon": -65.432474,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25843",
+    "name": "Villa De San Diego De Ubaté",
+    "lat": 5.307463,
+    "lon": -73.814367,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25871",
+    "name": "Villagómez",
+    "lat": 5.273024,
+    "lon": -74.195145,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72149",
+    "name": "Villalba",
+    "lat": 18.130718,
+    "lon": -66.472244,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25873",
+    "name": "Villapinzón",
+    "lat": 5.216393,
+    "lon": -73.595704,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25875",
+    "name": "Villeta",
+    "lat": 5.012754,
+    "lon": -74.469686,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25878",
+    "name": "Viotá",
+    "lat": 4.43935,
+    "lon": -74.523131,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72151",
+    "name": "Yabucoa",
+    "lat": 18.059859,
+    "lon": -65.85987,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25885",
+    "name": "Yacopí",
+    "lat": 5.459272,
+    "lon": -74.33806,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "72153",
+    "name": "Yauco",
+    "lat": 18.085669,
+    "lon": -66.857901,
+    "region": "pr",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25898",
+    "name": "Zipacón",
+    "lat": 4.759932,
+    "lon": -74.379566,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25899",
+    "name": "Zipaquirá",
+    "lat": 5.025477,
+    "lon": -73.994444,
+    "region": "co",
+    "kind": "Municipio"
+  },
+  {
+    "id": "25851",
+    "name": "Útica",
+    "lat": 5.19055,
+    "lon": -74.483154,
+    "region": "co",
+    "kind": "Municipio"
+  }
+]
