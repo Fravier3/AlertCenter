@@ -5,6 +5,8 @@ import {
   MapContainer,
   TileLayer,
   CircleMarker,
+  Circle,
+  Polyline,
   Popup,
   GeoJSON,
   useMap,
@@ -19,6 +21,29 @@ function Focus({ place, region }: { place: Place; region: Region }) {
     setTimeout(() => map.invalidateSize(), 200);
   }, [place, region, map]);
   return null;
+}
+function DeviceLocation({ active, onStatus }: { active: boolean; onStatus: (s: string) => void }) {
+  const map = useMap();
+  const [point, setPoint] = useState<{lat:number;lon:number;accuracy:number} | null>(null);
+  const [trail, setTrail] = useState<[number,number][]>([]);
+  useEffect(() => {
+    if (!active) { setPoint(null); setTrail([]); return; }
+    if (!navigator.geolocation) { onStatus("Este navegador no ofrece ubicación."); return; }
+    onStatus("Esperando permiso y ubicación del dispositivo…");
+    const watch = navigator.geolocation.watchPosition(pos => {
+      const {latitude:lat, longitude:lon, accuracy} = pos.coords;
+      setPoint({lat,lon,accuracy});
+      setTrail(old => [...old.slice(-199), [lat,lon]]);
+      map.panTo([lat,lon]);
+      onStatus(`Ubicación actualizada · precisión aproximada ${Math.round(accuracy)} m. Recorrido temporal, solo mientras esta vista permanezca abierta.`);
+    }, error => onStatus(error.code === 1 ? "Permiso de ubicación denegado. Puedes seguir usando el mapa manualmente." : "No se pudo actualizar tu ubicación. Comprueba la señal del dispositivo."), {enableHighAccuracy:true, maximumAge:5000,timeout:15000});
+    return () => navigator.geolocation.clearWatch(watch);
+  }, [active,map,onStatus]);
+  return point && active ? <>
+    <Circle center={[point.lat,point.lon]} radius={point.accuracy} pathOptions={{color:"#177df0",weight:1,fillOpacity:.08}} />
+    <Polyline positions={trail} pathOptions={{color:"#177df0",weight:3}} />
+    <CircleMarker center={[point.lat,point.lon]} radius={8} pathOptions={{color:"white",fillColor:"#177df0",fillOpacity:1,weight:3}}><Popup>Tu dispositivo · precisión aproximada {Math.round(point.accuracy)} m</Popup></CircleMarker>
+  </> : null;
 }
 export default function MonitorMap({
   place,
@@ -41,6 +66,9 @@ export default function MonitorMap({
   onPlace: (p: Place) => void;
   preview?: boolean;
 }) {
+  const [tracking, setTracking] = useState(false);
+  const [trackingStatus, setTrackingStatus] = useState("");
+  useEffect(() => { setTracking(false); setTrackingStatus(""); }, [region]);
   const [layer, setLayer] = useState("sismos");
   const [samples, setSamples] = useState<any[]>([]);
   const [stationData, setStations] = useState<Feature[]>([]);
@@ -96,7 +124,8 @@ export default function MonitorMap({
           <span className="eyebrow">EXPLORA TU REGIÓN</span>
           <h2>Mapa de monitoreo</h2>
         </div>
-        <button onClick={() => setCenter((x) => x + 1)}>Centrar región</button>
+        <div className="map-actions"><button aria-pressed={tracking} onClick={() => setTracking(x => !x)}>{tracking ? "Detener seguimiento" : "Seguir mi ubicación"}</button>
+        <button onClick={() => { setTracking(false); setCenter((x) => x + 1); }}>Centrar región</button></div>
       </div>
       <div className="map-wrap">
         <MapContainer
@@ -105,6 +134,7 @@ export default function MonitorMap({
           scrollWheelZoom={!preview}
           className="map"
         >
+          <DeviceLocation active={tracking} onStatus={setTrackingStatus} />
           <Focus key={center} place={place} region={region} />
           <TileLayer
             key="openstreetmap"
@@ -251,6 +281,7 @@ export default function MonitorMap({
           {region === "pr" ? "PUERTO RICO" : "BOGOTÁ + CUNDINAMARCA"}
         </div>
       </div>
+      {tracking && <p className="map-note" role="status">{trackingStatus} El seguimiento se detiene al salir del mapa; la pantalla bloqueada puede suspenderlo.</p>}
       <div className="layer-bar" role="group" aria-label="Capas del mapa">
         {[
           ["sismos", "Sismos"],
