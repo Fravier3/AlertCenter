@@ -1394,7 +1394,7 @@ export default function App() {
                 {forecast}
                 {airPanel}
               </div>
-              <ModelSignals weather={weather} />
+              <ModelSignals weather={weather} unit={unit} />
               <Panel title="Pronóstico por hora" kicker="24 HORAS · HORA LOCAL">
                 <div className="hourly-scroll">
                   {next24.map((h: any, i: number) => (

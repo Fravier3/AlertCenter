@@ -1,6 +1,7 @@
 import { CloudRain, Wind, Thermometer, Info } from "lucide-react";
+import { temp } from "../services/domain.mjs";
 import type { Weather } from "../types";
-export default function ModelSignals({ weather }: { weather?: Weather }) {
+export default function ModelSignals({ weather, unit = "c" }: { weather?: Weather; unit?: "c" | "f" }) {
   const signals = [
     {
       name: "Lluvia prevista hoy",
@@ -45,7 +46,7 @@ export default function ModelSignals({ weather }: { weather?: Weather }) {
             <div>
               <small>{s.name}</small>
               <strong>
-                {s.value ?? "—"} {s.unit}
+                {s.unit === "°C" ? temp(s.value, unit) : s.value ?? "—"} {s.unit === "°C" ? `°${unit.toUpperCase()}` : s.unit}
               </strong>
               <span className={s.value >= s.threshold ? "amber" : ""}>
                 {s.value == null
@@ -60,7 +61,7 @@ export default function ModelSignals({ weather }: { weather?: Weather }) {
       </div>
       <p className="source-caption">
         Referencias propias de esta app: lluvia ≥ 20 mm/día, ráfagas ≥ 50 km/h,
-        sensación ≥ 38 °C. No equivalen a los criterios de NWS o IDEAM ni
+        sensación ≥ {temp(38, unit)} °{unit.toUpperCase()}. No equivalen a los criterios de NWS o IDEAM ni
         descartan riesgos por debajo de esos valores.
       </p>
     </section>
