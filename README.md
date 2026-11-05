@@ -19,7 +19,7 @@ Node 22 o superior. `src/` contiene fuentes; `dist/` es el único directorio pub
 - Condiciones meteorológicas estimadas, pronóstico horario y de siete días, gráficos y calidad del aire CAMS.
 - Alertas NWS activas para toda la isla, con severidad, vigencia, descripción y enlace al origen. Se descartan cancelaciones, pruebas y registros vencidos.
 - Sismos USGS de los últimos siete días con magnitud, profundidad, coordenadas, distancia, filtros, mapa y cronología. No se presentan como predicción ni alerta temprana.
-- Mapas CARTO / OpenStreetMap, marcadores de ubicación, epicentros, polígonos de alertas cuando existen, puntos meteorológicos de modelo y hasta 100 ubicaciones de estaciones NWS. Las estaciones abren observaciones oficiales externas.
+- Mapas CARTO / OpenStreetMap, marcadores de ubicación, epicentros, polígonos de alertas cuando existen, puntos meteorológicos de modelo y hasta 100 ubicaciones de estaciones NWS. Cada estación permite consultar su última observación NWS, con fecha y aviso si tiene más de una hora; los campos ausentes se identifican.
 - Favoritos, °C/°F, apariencia clara/oscura, región persistente y geolocalización opcional para seleccionar el punto más cercano.
 - PWA instalable, interfaz con áreas seguras, caché fechada y actualización controlada del service worker.
 
@@ -31,7 +31,7 @@ Node 22 o superior. `src/` contiene fuentes; `dist/` es el único directorio pub
 | Aire | https://open-meteo.com/en/docs/air-quality-api | Modelo CAMS / US AQI. Caché 30 min. Polvo mineral no confirma origen sahariano. |
 | Alertas PR | https://api.weather.gov/alerts/active?area=PR | Alertas oficiales. Caché 2 min. Texto original NWS. |
 | Sismos | https://earthquake.usgs.gov/fdsnws/event/1/ | Registros oficiales USGS. Caché 5 min por región. |
-| Estaciones PR | https://api.weather.gov/stations?state=PR&limit=100 | Ubicaciones de estaciones, no lectura instrumental integrada. Caché 24 h. |
+| Estaciones PR | https://api.weather.gov/stations?state=PR&limit=100 | Ubicaciones de estaciones (caché 24 h); observaciones bajo demanda (caché 10 min). |
 | Municipios PR | https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2025_Gazetteer/2025_Gaz_counties_national.zip | US Census Gazetteer 2025, centros representativos. |
 | Municipios CO | https://www.datos.gov.co/resource/gdxc-w37w.json | Datos Abiertos Colombia, DIVIPOLA. Bogotá y departamento 25. |
 | Localidades Bogotá | https://www.ideca.gov.co/ | Nombres y puntos representativos aproximados, sin polígonos oficiales. |

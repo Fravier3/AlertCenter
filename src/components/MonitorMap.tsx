@@ -1,3 +1,4 @@
+import StationObservation from "./StationObservation";
 import { useEffect, useState } from "react";
 import {
   MapContainer,
@@ -235,21 +236,7 @@ export default function MonitorMap({
                   pathOptions={{ color: "#70dfba" }}
                 >
                   <Popup>
-                    {s.properties.name}
-                    <br />
-                    Estación NWS · {s.properties.stationIdentifier}
-                    <br />
-                    <a
-                      href={
-                        "https://forecast.weather.gov/data/obhistory/" +
-                        s.properties.stationIdentifier +
-                        ".html"
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Observaciones oficiales ↗
-                    </a>
+                    <StationObservation station={s} />
                   </Popup>
                 </CircleMarker>
               ))}
