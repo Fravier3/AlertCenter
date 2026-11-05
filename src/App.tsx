@@ -1596,7 +1596,7 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </button>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.1">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.2">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
