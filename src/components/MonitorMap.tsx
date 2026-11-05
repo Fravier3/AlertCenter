@@ -1,3 +1,4 @@
+import { useRadar, RadarTiles, RadarControls } from "./Radar";
 import { temp } from "../services/domain.mjs";
 import StationObservation from "./StationObservation";
 import { useEffect, useState } from "react";
@@ -22,28 +23,95 @@ function Focus({ place, region }: { place: Place; region: Region }) {
   }, [place, region, map]);
   return null;
 }
-function DeviceLocation({ active, onStatus }: { active: boolean; onStatus: (s: string) => void }) {
+function DeviceLocation({
+  active,
+  onStatus,
+}: {
+  active: boolean;
+  onStatus: (s: string) => void;
+}) {
   const map = useMap();
-  const [point, setPoint] = useState<{lat:number;lon:number;accuracy:number} | null>(null);
-  const [trail, setTrail] = useState<[number,number][]>([]);
+  const [point, setPoint] = useState<{
+    lat: number;
+    lon: number;
+    accuracy: number;
+  } | null>(null);
+  const [trail, setTrail] = useState<[number, number][]>([]);
   useEffect(() => {
-    if (!active) { setPoint(null); setTrail([]); return; }
-    if (!navigator.geolocation) { onStatus("Este navegador no ofrece ubicación."); return; }
+    if (!active) {
+      setPoint(null);
+      setTrail([]);
+      return;
+    }
+    if (!navigator.geolocation) {
+      onStatus("Este navegador no ofrece ubicación.");
+      return;
+    }
     onStatus("Esperando permiso y ubicación del dispositivo…");
-    const watch = navigator.geolocation.watchPosition(pos => {
-      const {latitude:lat, longitude:lon, accuracy} = pos.coords;
-      setPoint({lat,lon,accuracy});
-      setTrail(old => [...old.slice(-199), [lat,lon]]);
-      map.panTo([lat,lon]);
-      onStatus(`Ubicación actualizada · precisión aproximada ${Math.round(accuracy)} m. Recorrido temporal, solo mientras esta vista permanezca abierta.`);
-    }, error => onStatus(error.code === 1 ? "Permiso de ubicación denegado. Puedes seguir usando el mapa manualmente." : "No se pudo actualizar tu ubicación. Comprueba la señal del dispositivo."), {enableHighAccuracy:true, maximumAge:5000,timeout:15000});
-    return () => navigator.geolocation.clearWatch(watch);
-  }, [active,map,onStatus]);
-  return point && active ? <>
-    <Circle center={[point.lat,point.lon]} radius={point.accuracy} pathOptions={{color:"#177df0",weight:1,fillOpacity:.08}} />
-    <Polyline positions={trail} pathOptions={{color:"#177df0",weight:3}} />
-    <CircleMarker center={[point.lat,point.lon]} radius={8} pathOptions={{color:"white",fillColor:"#177df0",fillOpacity:1,weight:3}}><Popup>Tu dispositivo · precisión aproximada {Math.round(point.accuracy)} m</Popup></CircleMarker>
-  </> : null;
+    let watch: number | null = null;
+    const clear = () => {
+      if (watch !== null) navigator.geolocation.clearWatch(watch);
+      watch = null;
+    };
+    const sync = () => {
+      clear();
+      if (document.visibilityState !== "visible") {
+        onStatus("Seguimiento pausado mientras la aplicación está oculta.");
+        return;
+      }
+      watch = navigator.geolocation.watchPosition(
+        (pos) => {
+          const { latitude: lat, longitude: lon, accuracy } = pos.coords;
+          setPoint({ lat, lon, accuracy });
+          setTrail((old) => [...old.slice(-199), [lat, lon]]);
+          map.panTo([lat, lon]);
+          onStatus(
+            `Ubicación actualizada · precisión aproximada ${Math.round(accuracy)} m. Recorrido temporal, solo mientras esta vista permanezca abierta.`,
+          );
+        },
+        (error) =>
+          onStatus(
+            error.code === 1
+              ? "Permiso de ubicación denegado. Puedes seguir usando el mapa manualmente."
+              : "No se pudo actualizar tu ubicación. Comprueba la señal del dispositivo.",
+          ),
+        { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 },
+      );
+    };
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      clear();
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, [active, map, onStatus]);
+  return point && active ? (
+    <>
+      <Circle
+        center={[point.lat, point.lon]}
+        radius={point.accuracy}
+        pathOptions={{ color: "#177df0", weight: 1, fillOpacity: 0.08 }}
+      />
+      <Polyline
+        positions={trail}
+        pathOptions={{ color: "#177df0", weight: 3 }}
+      />
+      <CircleMarker
+        center={[point.lat, point.lon]}
+        radius={8}
+        pathOptions={{
+          color: "white",
+          fillColor: "#177df0",
+          fillOpacity: 1,
+          weight: 3,
+        }}
+      >
+        <Popup>
+          Tu dispositivo · precisión aproximada {Math.round(point.accuracy)} m
+        </Popup>
+      </CircleMarker>
+    </>
+  ) : null;
 }
 export default function MonitorMap({
   place,
@@ -55,6 +123,7 @@ export default function MonitorMap({
   unit,
   onPlace,
   preview = false,
+  onForecast,
 }: {
   place: Place;
   places: Place[];
@@ -65,11 +134,16 @@ export default function MonitorMap({
   unit: "c" | "f";
   onPlace: (p: Place) => void;
   preview?: boolean;
+  onForecast: () => void;
 }) {
   const [tracking, setTracking] = useState(false);
   const [trackingStatus, setTrackingStatus] = useState("");
-  useEffect(() => { setTracking(false); setTrackingStatus(""); }, [region]);
+  useEffect(() => {
+    setTracking(false);
+    setTrackingStatus("");
+  }, [region]);
   const [layer, setLayer] = useState("sismos");
+  const radar = useRadar(layer === "radar", place);
   const [samples, setSamples] = useState<any[]>([]);
   const [stationData, setStations] = useState<Feature[]>([]);
   const [status, setStatus] = useState("");
@@ -118,14 +192,34 @@ export default function MonitorMap({
     };
   }, [layer, region, places]);
   return (
-    <section className={"map-card " + (theme === "dark" ? "map-night " : "") + (preview ? "map-preview" : "")}>
+    <section
+      className={
+        "map-card " +
+        (theme === "dark" ? "map-night " : "") +
+        (preview ? "map-preview" : "")
+      }
+    >
       <div className="map-toolbar">
         <div>
           <span className="eyebrow">EXPLORA TU REGIÓN</span>
           <h2>Mapa de monitoreo</h2>
         </div>
-        <div className="map-actions"><button aria-pressed={tracking} onClick={() => setTracking(x => !x)}>{tracking ? "Detener seguimiento" : "Seguir mi ubicación"}</button>
-        <button onClick={() => { setTracking(false); setCenter((x) => x + 1); }}>Centrar región</button></div>
+        <div className="map-actions">
+          <button
+            aria-pressed={tracking}
+            onClick={() => setTracking((x) => !x)}
+          >
+            {tracking ? "Detener seguimiento" : "Seguir mi ubicación"}
+          </button>
+          <button
+            onClick={() => {
+              setTracking(false);
+              setCenter((x) => x + 1);
+            }}
+          >
+            Centrar región
+          </button>
+        </div>
       </div>
       <div className="map-wrap">
         <MapContainer
@@ -138,11 +232,18 @@ export default function MonitorMap({
           <Focus key={center} place={place} region={region} />
           <TileLayer
             key="openstreetmap"
+            className="map-base"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={19}
-            eventHandlers={{ tileerror: () => setStatus("No se pudo cargar el mapa. Comprueba tu conexión y vuelve a abrir esta sección.") }}
+            eventHandlers={{
+              tileerror: () =>
+                setStatus(
+                  "No se pudo cargar el mapa. Comprueba tu conexión y vuelve a abrir esta sección.",
+                ),
+            }}
           />
+          {layer === "radar" && <RadarTiles radar={radar} region={region} />}
           <CircleMarker
             center={[place.lat, place.lon]}
             radius={9}
@@ -281,14 +382,20 @@ export default function MonitorMap({
           {region === "pr" ? "PUERTO RICO" : "BOGOTÁ + CUNDINAMARCA"}
         </div>
       </div>
-      {tracking && <p className="map-note" role="status">{trackingStatus} El seguimiento se detiene al salir del mapa; la pantalla bloqueada puede suspenderlo.</p>}
+      {tracking && (
+        <p className="map-note" role="status">
+          {trackingStatus} El seguimiento se detiene al salir del mapa; la
+          pantalla bloqueada puede suspenderlo.
+        </p>
+      )}
       <div className="layer-bar" role="group" aria-label="Capas del mapa">
         {[
           ["sismos", "Sismos"],
           ["municipios", "Ubicaciones"],
           ["alertas", "Alertas"],
           ["temperatura", "Temperatura"],
-          ["lluvia", "Lluvia"],
+          ["lluvia", "Lluvia · modelo"],
+          ["radar", "Radar de lluvia"],
           ["viento", "Viento"],
           ...(region === "pr" ? [["estaciones", "Estaciones"]] : []),
         ].map(([id, label]) => (
@@ -301,18 +408,23 @@ export default function MonitorMap({
           </button>
         ))}
       </div>
-      <p className="map-note">
-        {status ||
-          (layer === "sismos"
-            ? "● Violeta: sismos USGS · coral: magnitud ≥ 4 · tamaño según magnitud"
-            : layer === "alertas"
-              ? region === "co"
-                ? "Colombia: capa vigente no disponible. Consulta los boletines oficiales."
-                : `${alerts.filter((a) => a.geometry).length} alertas con geometría. Las alertas sin polígono se muestran en Alertas.`
-              : "Toca un punto para consultar su información.")}{" "}
-        {["temperatura", "lluvia", "viento"].includes(layer) &&
-          "Sin interpolación ni radar: cada punto representa un modelo local."}
-      </p>
+      {layer === "radar" && (
+        <RadarControls radar={radar} place={place} onForecast={onForecast} />
+      )}
+      {layer !== "radar" && (
+        <p className="map-note">
+          {status ||
+            (layer === "sismos"
+              ? "● Violeta: sismos USGS · coral: magnitud ≥ 4 · tamaño según magnitud"
+              : layer === "alertas"
+                ? region === "co"
+                  ? "Colombia: capa vigente no disponible. Consulta los boletines oficiales."
+                  : `${alerts.filter((a) => a.geometry).length} alertas con geometría. Las alertas sin polígono se muestran en Alertas.`
+                : "Toca un punto para consultar su información.")}{" "}
+          {["temperatura", "lluvia", "viento"].includes(layer) &&
+            "Sin interpolación ni radar: cada punto representa un modelo local."}
+        </p>
+      )}
     </section>
   );
 }

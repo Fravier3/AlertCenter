@@ -38,7 +38,7 @@ Node 22 o superior. `src/` contiene fuentes; `dist/` es el único directorio pub
 
 **Colombia:** el servicio ArcGIS de IDEAM `OSPA/Alertas_Nacional/MapServer/0` respondió, pero sus registros consultados tenían fecha de 2022. Por eso no se incorpora como feed vigente. IDEAM, IDIGER, UNGRD, RMCAB y SGC aparecen como enlaces de consulta externa explícitamente identificados. SGC no proporcionó un feed automatizado accesible en la comprobación; USGS sirve ambas regiones. NHC y la Red Sísmica de Puerto Rico se ofrecen como fuentes oficiales externas, sin simular integración en vivo.
 
-No hay radar continuo ni interpolación meteorológica artificial. Las capas de temperatura, lluvia y viento consultan un máximo de 12 puntos representativos, con caché de 30 min; se solicitan solo al abrir esas capas. No se mantiene vigilancia con la aplicación cerrada. Los avisos opcionales requieren permiso explícito, service worker y navegador compatible; se evalúan con la app visible cada cinco minutos. No hay infraestructura push de servidor.
+La capa Radar de lluvia es una secuencia observada; no hay interpolación meteorológica artificial ni radar futuro. Las capas de temperatura, lluvia y viento consultan un máximo de 12 puntos representativos, con caché de 30 min; se solicitan solo al abrir esas capas. No se mantiene vigilancia con la aplicación cerrada. Los avisos opcionales requieren permiso explícito, service worker y navegador compatible; se evalúan con la app visible cada cinco minutos. No hay infraestructura push de servidor.
 
 ## Resiliencia, privacidad y rendimiento
 
@@ -53,3 +53,11 @@ Los módulos de mapa y gráficas se cargan por separado. La compilación minific
 `npm test` verifica cobertura geográfica, ajustes corruptos, conversión de temperatura, zonas horarias, exclusión de alertas vencidas o de prueba, umbrales US AQI, distancias, agrupación por día local, deduplicación, caché, fallos de API y almacenamiento bloqueado. `npm run build` incluye verificación TypeScript y generación PWA.
 
 Las comprobaciones visuales en navegador cubren escritorio y un viewport móvil con insets simulados. Instalación y comportamiento físico de iOS/Android requieren verificación en dispositivos reales; no se confunden con emulación.
+
+## Radar de lluvia (v1.0.5)
+
+La capa Radar de lluvia utiliza RainViewer Weather Maps API, gratuita sin clave para uso personal/no comercial. Muestra hasta 13 mosaicos observados de las últimas dos horas, con control de reproducción/pausa y fecha local. El manifiesto se guarda por cinco minutos; solo se consulta al activar la capa. La animación avanza cada ocho segundos y se pausa al ocultar la página para reducir solicitudes. Las teselas se limitan a la región seleccionada y a la resolución nativa máxima 7.
+
+La máscara del proveedor sombrea zonas sin cobertura. También se comprueba el píxel del centro representativo de la ubicación seleccionada; no se extrapola esa comprobación a todo el municipio. Si no puede leerse la máscara o falla una imagen, se avisa explícitamente. En la comprobación inicial San Juan tenía cobertura y Bogotá no; esto no garantiza la disponibilidad futura. Un mapa vacío no se presenta como ausencia de lluvia. La máscara del proveedor puede estar desactualizada.
+
+Esta API no proporciona radar futuro desde enero de 2026. El botón Ver pronóstico lleva al modelo horario de Open-Meteo, identificado por separado; no se inventa una trayectoria futura. Atribución visible Weather data by RainViewer. Fuentes: https://www.rainviewer.com/api/weather-maps-api.html y https://www.rainviewer.com/api/transition-faq.html .

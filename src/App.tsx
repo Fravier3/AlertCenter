@@ -604,6 +604,7 @@ export default function App() {
         theme={settings.theme}
         unit={unit}
         onPlace={setPlace}
+        onForecast={() => navigate("clima")}
         preview={view === "inicio"}
       />
     </Suspense>
@@ -1153,10 +1154,7 @@ export default function App() {
                 </Panel>
                 <Panel title="Disponibilidad" kicker="TRANSPARENCIA">
                   <p className="explain">
-                    No se incluyen capas continuas de radar, aire ni estaciones
-                    colombianas sin integración verificada. La calidad del aire
-                    modelada para tu ubicación está en Clima. El mapa base
-                    requiere conexión.
+                    El radar muestra lluvia observada de RainViewer, con cobertura y fecha visibles; no ofrece imágenes futuras. Las zonas sin cobertura están sombreadas. La lluvia futura por hora y el aire modelado están en Clima. El mapa requiere conexión.
                   </p>
                 </Panel>
               </div>
@@ -1613,7 +1611,7 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </button>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.4">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.5">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
