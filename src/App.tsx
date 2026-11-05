@@ -234,6 +234,8 @@ export default function App() {
   const time = (t: string) => t?.split("T")[1]?.slice(0, 5) || "—";
   const t = (v: number) => temp(v, unit);
   const degree = unit === "c" ? "°C" : "°F";
+  const alternateUnit = unit === "c" ? "f" : "c";
+  const secondaryTemperature = (value: number) => <small className="secondary-temperature" aria-label="Temperatura en la unidad alternativa">{temp(value, alternateUnit)}°{alternateUnit.toUpperCase()}</small>;
   const next24 =
     weather?.hourly.time
       .slice(hourIndex, hourIndex + 24)
@@ -924,6 +926,7 @@ export default function App() {
                       <div className="temperature">
                         {t(current?.temperature_2m)}
                         <span>{degree}</span>
+                        {secondaryTemperature(current?.temperature_2m)}
                       </div>
                       <p className="condition">
                         {current
@@ -1329,7 +1332,7 @@ export default function App() {
               <section className="weather-hero living-weather climate-sky">
                 <WeatherSky current={current} />
                 <span className="eyebrow">EL CIELO EN {place.name.toUpperCase()}</span>
-                <h2>{t(current?.temperature_2m)}{degree} · {current ? weatherLabel(current.weather_code) : "Consultando clima…"}</h2>
+                <h2>{t(current?.temperature_2m)}{degree} {secondaryTemperature(current?.temperature_2m)} · {current ? weatherLabel(current.weather_code) : "Consultando clima…"}</h2>
                 <p>Condiciones de modelo · animación ambiental ilustrativa</p>
                 <div className="unit-switch" role="group" aria-label="Unidad de temperatura de esta región">
                   {(["f", "c"] as const).map(u => <button key={u} aria-pressed={unit === u} onClick={() => setUnit(u)}>°{u.toUpperCase()}</button>)}
@@ -1610,7 +1613,7 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </button>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.3">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.4">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
