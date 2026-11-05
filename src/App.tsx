@@ -1,3 +1,4 @@
+import WeatherSky from "./components/WeatherSky";
 import ModelSignals from "./components/ModelSignals";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -153,6 +154,8 @@ export default function App() {
   const [installHelp, setInstallHelp] = useState(false);
   const [now, setNow] = useState(Date.now());
   const region = settings.region;
+  const unit = settings.units[region];
+  const setUnit = (value: "c" | "f") => setSettings(s => ({...s, units: {...s.units, [s.region]: value}}));
   const place =
     places.find((p) => p.id === settings.placeId) ||
     places.find((p) => p.id === "72127")!;
@@ -229,8 +232,8 @@ export default function App() {
       minute: "2-digit",
     });
   const time = (t: string) => t?.split("T")[1]?.slice(0, 5) || "—";
-  const t = (v: number) => temp(v, settings.unit);
-  const degree = settings.unit === "c" ? "°C" : "°F";
+  const t = (v: number) => temp(v, unit);
+  const degree = unit === "c" ? "°C" : "°F";
   const next24 =
     weather?.hourly.time
       .slice(hourIndex, hourIndex + 24)
@@ -242,7 +245,7 @@ export default function App() {
             : Number(
                 temp(
                   weather.hourly.temperature_2m[hourIndex + i],
-                  settings.unit,
+                  unit,
                 ),
               ),
         rain: weather.hourly.precipitation[hourIndex + i],
@@ -597,6 +600,7 @@ export default function App() {
         alerts={shownAlerts}
         region={region}
         theme={settings.theme}
+        unit={unit}
         onPlace={setPlace}
         preview={view === "inicio"}
       />
@@ -900,7 +904,8 @@ export default function App() {
           {view === "inicio" && (
             <>
               <div className="dashboard-top">
-                <section className="weather-hero">
+                <section className="weather-hero living-weather">
+                  <WeatherSky current={current} />
                   <div className="hero-meta">
                     <span className="tag">CONDICIONES DEL MODELO</span>
                     <span>{place.kind}</span>
@@ -1321,6 +1326,15 @@ export default function App() {
           )}
           {view === "clima" && (
             <>
+              <section className="weather-hero living-weather climate-sky">
+                <WeatherSky current={current} />
+                <span className="eyebrow">EL CIELO EN {place.name.toUpperCase()}</span>
+                <h2>{t(current?.temperature_2m)}{degree} · {current ? weatherLabel(current.weather_code) : "Consultando clima…"}</h2>
+                <p>Condiciones de modelo · animación ambiental ilustrativa</p>
+                <div className="unit-switch" role="group" aria-label="Unidad de temperatura de esta región">
+                  {(["f", "c"] as const).map(u => <button key={u} aria-pressed={unit === u} onClick={() => setUnit(u)}>°{u.toUpperCase()}</button>)}
+                </div>
+              </section>
               <div className="metrics-grid detailed">
                 {[
                   {
@@ -1486,11 +1500,11 @@ export default function App() {
                     </select>
                   </label>
                   <label>
-                    Temperatura
+                    Temperatura · {region === "pr" ? "Puerto Rico" : "Bogotá y Cundinamarca"}
                     <select
-                      value={settings.unit}
+                      value={unit}
                       onChange={(e) =>
-                        patch({ unit: e.target.value as "c" | "f" })
+                        setUnit(e.target.value as "c" | "f")
                       }
                     >
                       <option value="c">Celsius · °C</option>
@@ -1596,7 +1610,7 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </button>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.2">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.3">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben

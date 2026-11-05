@@ -19,6 +19,7 @@ export type Settings = {
   placeId: string;
   theme: "dark" | "light";
   unit: "c" | "f";
+  units: Record<Region, "c" | "f">;
   mag: number;
   favorites: string[];
   showAlerts: boolean;

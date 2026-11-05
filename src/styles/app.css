@@ -2329,3 +2329,29 @@ summary {
     letter-spacing: 0.8px;
   }
 }
+
+/* Atmospheric sky, lightweight and independent from data requests. */
+.living-weather { isolation: isolate; color: #fff; background: #246bab; min-height: 270px; }
+.living-weather > :not(.weather-sky) { position: relative; z-index: 1; }
+.weather-sky { position: absolute; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(150deg,#126ba5,#64a9db 65%,#bdd7e8); }
+.weather-sky::after { content: ""; position:absolute; inset:0; background:linear-gradient(90deg,#071c36ce,transparent 100%); }
+.sky-night { background:radial-gradient(ellipse at 80% 10%,#42537c,#142640 65%,#101d31); }
+.sky-cloudy { background:linear-gradient(140deg,#45617f,#8bacc2); }
+.sky-night.sky-cloudy { background:linear-gradient(140deg,#192a42,#50657b); }
+.sky-rain { background:linear-gradient(140deg,#263e58,#648095); }
+.sky-orb { position:absolute; width:110px; height:110px; border-radius:50%; top:28px; right:18%; background:#fff0b7; box-shadow:0 0 65px 25px #ffe6a050; animation:sky-glow 9s ease-in-out infinite alternate; }
+.sky-night .sky-orb { background:#e4edff; box-shadow:0 0 40px #c3dbff55; width:65px;height:65px; }
+.sky-cloud { position:absolute; width:300px;height:90px;border-radius:50%; background:radial-gradient(ellipse,#ffffffb0, #ffffff55 50%,transparent 72%); filter:blur(12px); animation:sky-drift 42s ease-in-out infinite alternate; }
+.sky-cloud::before,.sky-cloud::after { content:"";position:absolute;background:inherit;border-radius:50%;width:65%;height:110%;top:-30%;left:15%; }
+.cloud-one { top:22%;right:-3%; }.cloud-two { top:57%;right:22%;transform:scale(1.3);animation-delay:-20s; }.cloud-three { top:8%;left:18%;opacity:.45;animation-delay:-10s; }
+.sky-night .sky-cloud { opacity:.3; }.sky-rain .sky-cloud { opacity:.6; }
+.sky-drops { position:absolute;inset:-60px;background:repeating-linear-gradient(110deg,transparent 0,transparent 28px,#d9ecff40 29px,transparent 30px);animation:sky-rain 1.3s linear infinite;opacity:.35; }
+.living-weather .hero-meta,.living-weather .hero-weather p,.living-weather .hero-bottom,.climate-sky .eyebrow { color:#e0ecf5; }
+.climate-sky { margin-bottom:20px;display:flex;flex-direction:column;justify-content:center;gap:16px; }
+.climate-sky h2 { font-size:clamp(24px,4vw,40px); margin:0; }.climate-sky p { color:#e4eef7;margin:0; }
+.unit-switch { display:flex;gap:8px; }.unit-switch button { background:#10263d99;color:white;border:1px solid #ffffff70;border-radius:12px;padding:10px 20px; }.unit-switch button[aria-pressed="true"] { background:#fff;color:#16334d; }
+.map-night .leaflet-tile-pane { filter:brightness(.85) saturate(.8); }
+@keyframes sky-drift { from { translate:-35px 0; } to { translate:45px 8px; } }
+@keyframes sky-glow { to { opacity:.75; } }
+@keyframes sky-rain { to { transform:translate(-20px,45px); } }
+@media(prefers-reduced-motion:reduce) { .weather-sky * { animation:none!important; } }

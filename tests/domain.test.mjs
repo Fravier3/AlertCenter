@@ -107,3 +107,15 @@ test("seismic distances and day grouping use selected region", () => {
   assert.equal(dailyQuakes(events, zones.co, 1, now)[0].count, 0);
   assert.equal(dailyQuakes([], zones.pr, 7, now).length, 7);
 });
+test("temperature choices survive region switches and persisted reloads", () => {
+  const places = [{id:"72127",region:"pr"},{id:"11001",region:"co"}];
+  const initial = safeSettings(null, places);
+  assert.deepEqual(initial.units, {pr:"f",co:"c"});
+  const stored = JSON.parse(JSON.stringify({...initial, units:{pr:"f",co:"c"}, placeId:"11001"}));
+  const co = safeSettings(stored, places);
+  assert.equal(co.units.co,"c");
+  const pr = safeSettings({...co,placeId:"72127"},places);
+  assert.equal(pr.units.pr,"f");
+  assert.equal(pr.units.co,"c");
+  assert.deepEqual(safeSettings({unit:"f"},places).units,{pr:"f",co:"f"});
+});

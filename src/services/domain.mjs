@@ -111,6 +111,7 @@ export function safeSettings(value, places) {
     placeId: "72127",
     theme: "dark",
     unit: "c",
+    units: { pr: "f", co: "c" },
     mag: 0,
     favorites: [],
     showAlerts: true,
@@ -124,6 +125,10 @@ export function safeSettings(value, places) {
     placeId: p?.id || base.placeId,
     theme: value.theme === "light" ? "light" : "dark",
     unit: value.unit === "f" ? "f" : "c",
+    units: Object.fromEntries(["pr", "co"].map(region => [region,
+      ["c", "f"].includes(value.units?.[region]) ? value.units[region]
+        : value.unit === "f" ? "f" : value.unit === "c" ? "c" : region === "pr" ? "f" : "c"
+    ])),
     mag: Number.isFinite(value.mag) ? Math.max(0, Math.min(7, value.mag)) : 0,
     favorites: Array.isArray(value.favorites)
       ? value.favorites.filter((id) => places.some((p) => p.id === id))

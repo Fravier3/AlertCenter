@@ -1,7 +1,8 @@
+import { temp } from "../services/domain.mjs";
 import { useState } from "react";
 import type { Feature, Result } from "../types";
 import { observation } from "../services/api";
-export default function StationObservation({ station }: { station: Feature }) {
+export default function StationObservation({ station, unit = "c" }: { station: Feature; unit?: "c" | "f" }) {
   const [result, setResult] = useState<Result<{ properties: any }> | null>(
     null,
   );
@@ -39,7 +40,7 @@ export default function StationObservation({ station }: { station: Feature }) {
         <>
           <span className="tag">OBSERVACIÓN DE ESTACIÓN</span>
           <p>
-            Temperatura: {value(p.temperature)} °C
+            Temperatura: {temp(p.temperature?.value, unit)} °{unit.toUpperCase()}
             <br />
             Humedad: {value(p.relativeHumidity)} %<br />
             Viento: {value(p.windSpeed)} km/h

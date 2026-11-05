@@ -1,3 +1,4 @@
+import { temp } from "../services/domain.mjs";
 import StationObservation from "./StationObservation";
 import { useEffect, useState } from "react";
 import {
@@ -26,6 +27,7 @@ export default function MonitorMap({
   alerts,
   region,
   theme,
+  unit,
   onPlace,
   preview = false,
 }: {
@@ -35,6 +37,7 @@ export default function MonitorMap({
   alerts: Feature[];
   region: Region;
   theme: string;
+  unit: "c" | "f";
   onPlace: (p: Place) => void;
   preview?: boolean;
 }) {
@@ -87,7 +90,7 @@ export default function MonitorMap({
     };
   }, [layer, region, places]);
   return (
-    <section className={"map-card " + (preview ? "map-preview" : "")}>
+    <section className={"map-card " + (theme === "dark" ? "map-night " : "") + (preview ? "map-preview" : "")}>
       <div className="map-toolbar">
         <div>
           <span className="eyebrow">EXPLORA TU REGIÓN</span>
@@ -104,9 +107,11 @@ export default function MonitorMap({
         >
           <Focus key={center} place={place} region={region} />
           <TileLayer
-            key={theme}
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url={`https://{s}.basemaps.cartocdn.com/${theme === "light" ? "light_all" : "dark_all"}/{z}/{x}/{y}{r}.png`}
+            key="openstreetmap"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maxZoom={19}
+            eventHandlers={{ tileerror: () => setStatus("No se pudo cargar el mapa. Comprueba tu conexión y vuelve a abrir esta sección.") }}
           />
           <CircleMarker
             center={[place.lat, place.lon]}
@@ -213,7 +218,7 @@ export default function MonitorMap({
                   <strong>{p.name}</strong>
                   <p>
                     {layer === "temperatura"
-                      ? `${p.temperature_2m} °C`
+                      ? `${temp(p.temperature_2m, unit)} °${unit.toUpperCase()}`
                       : layer === "lluvia"
                         ? `${p.precipitation} mm (intervalo actual del modelo)`
                         : `${p.wind_speed_10m} km/h`}
@@ -236,7 +241,7 @@ export default function MonitorMap({
                   pathOptions={{ color: "#70dfba" }}
                 >
                   <Popup>
-                    <StationObservation station={s} />
+                    <StationObservation station={s} unit={unit} />
                   </Popup>
                 </CircleMarker>
               ))}
