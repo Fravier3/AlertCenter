@@ -20,7 +20,7 @@ Node 22 o superior. `src/` contiene fuentes; `dist/` es el único directorio pub
 - Alertas NWS activas para toda la isla, con severidad, vigencia, descripción y enlace al origen. Se descartan cancelaciones, pruebas y registros vencidos.
 - Sismos USGS de los últimos siete días con magnitud, profundidad, coordenadas, distancia, filtros, mapa y cronología. No se presentan como predicción ni alerta temprana.
 - Mapas CARTO / OpenStreetMap, marcadores de ubicación, epicentros, polígonos de alertas cuando existen, puntos meteorológicos de modelo y hasta 100 ubicaciones de estaciones NWS. Cada estación permite consultar su última observación NWS, con fecha y aviso si tiene más de una hora; los campos ausentes se identifican.
-- Favoritos, °C/°F, apariencia clara/oscura, región persistente y geolocalización opcional para seleccionar el punto más cercano.
+- Favoritos, °C/°F, apariencia clara/oscura, región persistente y geolocalización opcional para mostrar la posición real del dispositivo.
 - PWA instalable, interfaz con áreas seguras, caché fechada y actualización controlada del service worker.
 
 ## Fuentes y límites verificados
@@ -42,7 +42,7 @@ La capa Radar de lluvia es una secuencia observada; no hay interpolación meteor
 
 ## Resiliencia, privacidad y rendimiento
 
-Las fuentes se consultan desde el navegador por HTTPS. Preferencias y respuestas públicas se guardan localmente; nunca credenciales. Se usa timeout, deduplicación de peticiones, caché por ubicación y región, validación básica de respuestas, reintento y fallback claramente identificado. Ningún fallo se convierte en una alerta o en un valor inventado. La geolocalización no se transmite directamente: se elige localmente la ubicación representativa más cercana y se consulta esa coordenada pública.
+Las fuentes se consultan desde el navegador por HTTPS. Preferencias y respuestas públicas se guardan localmente; nunca credenciales. Se usa timeout, deduplicación de peticiones, caché por ubicación y región, validación básica de respuestas, reintento y fallback claramente identificado. Ningún fallo se convierte en una alerta o en un valor inventado. La posición GPS y el recorrido se mantienen en memoria. El mapa base solicita teselas del área visible; los datos meteorológicos usan las coordenadas públicas del municipio seleccionado.
 
 Las rutas de recursos y manifest usan `/AlertCenter/`. La navegación usa hash para admitir recargas en Pages sin servidor SPA. Workbox precarga el build coherente y limpia exclusivamente su caché obsoleta. Las respuestas de APIs se guardan con fecha en almacenamiento local. La interfaz informa errores por fuente y datos recuperados de caché.
 
@@ -61,3 +61,9 @@ La capa Radar de lluvia utiliza RainViewer Weather Maps API, gratuita sin clave 
 La máscara del proveedor sombrea zonas sin cobertura. También se comprueba el píxel del centro representativo de la ubicación seleccionada; no se extrapola esa comprobación a todo el municipio. Si no puede leerse la máscara o falla una imagen, se avisa explícitamente. En la comprobación inicial San Juan tenía cobertura y Bogotá no; esto no garantiza la disponibilidad futura. Un mapa vacío no se presenta como ausencia de lluvia. La máscara del proveedor puede estar desactualizada.
 
 Esta API no proporciona radar futuro desde enero de 2026. El botón Ver pronóstico lleva al modelo horario de Open-Meteo, identificado por separado; no se inventa una trayectoria futura. Atribución visible Weather data by RainViewer. Fuentes: https://www.rainviewer.com/api/weather-maps-api.html y https://www.rainviewer.com/api/transition-faq.html .
+
+## Ubicación real (v1.0.6)
+
+Se elimina el marcador circular del centro del municipio. El botón superior Mostrar mi ubicación GPS real abre el mapa e inicia el mismo seguimiento explícito que Seguir mi ubicación. Se dibujan las coordenadas recibidas del dispositivo con una etiqueta TÚ y sin círculo de precisión que pueda confundirse con sismos. El municipio seleccionado sigue determinando el clima; no sustituye la posición del GPS ni se impide mostrar ubicaciones fuera de la región.
+
+Se solicita alta precisión, sin reutilizar posiciones antiguas, con timeout de 25 segundos. La primera posición centra y amplía el mapa; las siguientes siguen el movimiento. El recorrido es temporal, se borra al detener o salir del mapa, y el seguimiento se pausa con la app oculta. Se distinguen permiso denegado, GPS no disponible y timeout, con ayuda para iPhone y reintento. No es posible verificar o cambiar remotamente los permisos del teléfono del usuario.

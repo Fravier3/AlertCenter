@@ -1,3 +1,4 @@
+import DeviceLocation from "./DeviceLocation";
 import { useRadar, RadarTiles, RadarControls } from "./Radar";
 import { temp } from "../services/domain.mjs";
 import StationObservation from "./StationObservation";
@@ -6,8 +7,6 @@ import {
   MapContainer,
   TileLayer,
   CircleMarker,
-  Circle,
-  Polyline,
   Popup,
   GeoJSON,
   useMap,
@@ -23,96 +22,6 @@ function Focus({ place, region }: { place: Place; region: Region }) {
   }, [place, region, map]);
   return null;
 }
-function DeviceLocation({
-  active,
-  onStatus,
-}: {
-  active: boolean;
-  onStatus: (s: string) => void;
-}) {
-  const map = useMap();
-  const [point, setPoint] = useState<{
-    lat: number;
-    lon: number;
-    accuracy: number;
-  } | null>(null);
-  const [trail, setTrail] = useState<[number, number][]>([]);
-  useEffect(() => {
-    if (!active) {
-      setPoint(null);
-      setTrail([]);
-      return;
-    }
-    if (!navigator.geolocation) {
-      onStatus("Este navegador no ofrece ubicación.");
-      return;
-    }
-    onStatus("Esperando permiso y ubicación del dispositivo…");
-    let watch: number | null = null;
-    const clear = () => {
-      if (watch !== null) navigator.geolocation.clearWatch(watch);
-      watch = null;
-    };
-    const sync = () => {
-      clear();
-      if (document.visibilityState !== "visible") {
-        onStatus("Seguimiento pausado mientras la aplicación está oculta.");
-        return;
-      }
-      watch = navigator.geolocation.watchPosition(
-        (pos) => {
-          const { latitude: lat, longitude: lon, accuracy } = pos.coords;
-          setPoint({ lat, lon, accuracy });
-          setTrail((old) => [...old.slice(-199), [lat, lon]]);
-          map.panTo([lat, lon]);
-          onStatus(
-            `Ubicación actualizada · precisión aproximada ${Math.round(accuracy)} m. Recorrido temporal, solo mientras esta vista permanezca abierta.`,
-          );
-        },
-        (error) =>
-          onStatus(
-            error.code === 1
-              ? "Permiso de ubicación denegado. Puedes seguir usando el mapa manualmente."
-              : "No se pudo actualizar tu ubicación. Comprueba la señal del dispositivo.",
-          ),
-        { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 },
-      );
-    };
-    sync();
-    document.addEventListener("visibilitychange", sync);
-    return () => {
-      clear();
-      document.removeEventListener("visibilitychange", sync);
-    };
-  }, [active, map, onStatus]);
-  return point && active ? (
-    <>
-      <Circle
-        center={[point.lat, point.lon]}
-        radius={point.accuracy}
-        pathOptions={{ color: "#177df0", weight: 1, fillOpacity: 0.08 }}
-      />
-      <Polyline
-        positions={trail}
-        pathOptions={{ color: "#177df0", weight: 3 }}
-      />
-      <CircleMarker
-        center={[point.lat, point.lon]}
-        radius={8}
-        pathOptions={{
-          color: "white",
-          fillColor: "#177df0",
-          fillOpacity: 1,
-          weight: 3,
-        }}
-      >
-        <Popup>
-          Tu dispositivo · precisión aproximada {Math.round(point.accuracy)} m
-        </Popup>
-      </CircleMarker>
-    </>
-  ) : null;
-}
 export default function MonitorMap({
   place,
   places,
@@ -124,6 +33,8 @@ export default function MonitorMap({
   onPlace,
   preview = false,
   onForecast,
+  locationRequested = false,
+  onLocationConsumed,
 }: {
   place: Place;
   places: Place[];
@@ -135,13 +46,24 @@ export default function MonitorMap({
   onPlace: (p: Place) => void;
   preview?: boolean;
   onForecast: () => void;
+  locationRequested?: boolean;
+  onLocationConsumed: () => void;
 }) {
   const [tracking, setTracking] = useState(false);
+  const [locationAttempt, setLocationAttempt] = useState(0);
   const [trackingStatus, setTrackingStatus] = useState("");
   useEffect(() => {
     setTracking(false);
     setTrackingStatus("");
   }, [region]);
+  useEffect(() => {
+    if (locationRequested) {
+      setTracking(true);
+      setLocationAttempt((v) => v + 1);
+      onLocationConsumed();
+    }
+  }, [locationRequested]);
+
   const [layer, setLayer] = useState("sismos");
   const radar = useRadar(layer === "radar", place);
   const [samples, setSamples] = useState<any[]>([]);
@@ -207,13 +129,21 @@ export default function MonitorMap({
         <div className="map-actions">
           <button
             aria-pressed={tracking}
-            onClick={() => setTracking((x) => !x)}
+            onClick={() => {
+              setTracking(!tracking);
+              setTrackingStatus(
+                tracking
+                  ? "Seguimiento detenido; la posición GPS ya no se muestra."
+                  : "",
+              );
+            }}
           >
             {tracking ? "Detener seguimiento" : "Seguir mi ubicación"}
           </button>
           <button
             onClick={() => {
               setTracking(false);
+              setTrackingStatus("");
               setCenter((x) => x + 1);
             }}
           >
@@ -228,7 +158,11 @@ export default function MonitorMap({
           scrollWheelZoom={!preview}
           className="map"
         >
-          <DeviceLocation active={tracking} onStatus={setTrackingStatus} />
+          <DeviceLocation
+            active={tracking}
+            attempt={locationAttempt}
+            onStatus={setTrackingStatus}
+          />
           <Focus key={center} place={place} region={region} />
           <TileLayer
             key="openstreetmap"
@@ -244,17 +178,6 @@ export default function MonitorMap({
             }}
           />
           {layer === "radar" && <RadarTiles radar={radar} region={region} />}
-          <CircleMarker
-            center={[place.lat, place.lon]}
-            radius={9}
-            pathOptions={{ color: "#55e7f1", fillOpacity: 0.35, weight: 3 }}
-          >
-            <Popup>
-              {place.name}
-              <br />
-              Ubicación seleccionada
-            </Popup>
-          </CircleMarker>
           {layer === "municipios" &&
             places
               .filter((p) => p.region === region)
@@ -382,12 +305,43 @@ export default function MonitorMap({
           {region === "pr" ? "PUERTO RICO" : "BOGOTÁ + CUNDINAMARCA"}
         </div>
       </div>
-      {tracking && (
+      {(tracking || trackingStatus) && (
         <p className="map-note" role="status">
           {trackingStatus} El seguimiento se detiene al salir del mapa; la
           pantalla bloqueada puede suspenderlo.
         </p>
       )}
+      <details className="location-help">
+        <summary>¿No aparece tu ubicación real?</summary>
+        <p>
+          El marcador TÚ aparece únicamente al recibir coordenadas del
+          dispositivo. La ciudad del selector corresponde a los datos del clima,
+          no a tu GPS.
+        </p>
+        <p>
+          iPhone: Ajustes → Privacidad y seguridad → Localización. Activa
+          Localización y permite el acceso a Safari o a esta app; activa
+          Ubicación precisa si aparece. En Safari, abre el menú de la página →
+          ajustes del sitio web → Ubicación → Permitir. Los nombres pueden
+          variar según iOS.
+        </p>
+        <p>
+          Mantén la app visible. Si el dispositivo no tiene buena señal, prueba
+          cerca de una ventana o al aire libre.
+        </p>
+        <button
+          onClick={() => {
+            setTracking(true);
+            setLocationAttempt((v) => v + 1);
+          }}
+        >
+          Reintentar ubicación
+        </button>
+        <p>
+          No se guarda tu recorrido. Los sismos conservan sus colores y la
+          posición GPS utiliza una etiqueta TÚ, sin círculo de ciudad.
+        </p>
+      </details>
       <div className="layer-bar" role="group" aria-label="Capas del mapa">
         {[
           ["sismos", "Sismos"],

@@ -143,6 +143,7 @@ export default function App() {
       : "inicio",
   );
   const [refresh, setRefresh] = useState(0);
+  const [locationRequested, setLocationRequested] = useState(false);
   const [online, setOnline] = useState(navigator.onLine);
   const [notice, setNotice] = useState("");
   const [query, setQuery] = useState("");
@@ -354,43 +355,8 @@ export default function App() {
     });
   }, [q.result, al.result, region, settings.notify]);
   const locate = () => {
-    if (!navigator.geolocation) {
-      setNotice("Este navegador no dispone de geolocalización.");
-      return;
-    }
-    setNotice("Buscando la ubicación más cercana…");
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const p = places
-          .filter((x) => x.region === region)
-          .sort(
-            (a, b) =>
-              distance(
-                pos.coords.latitude,
-                pos.coords.longitude,
-                a.lat,
-                a.lon,
-              ) -
-              distance(pos.coords.latitude, pos.coords.longitude, b.lat, b.lon),
-          )[0];
-        if (
-          distance(pos.coords.latitude, pos.coords.longitude, p.lat, p.lon) >
-          250
-        ) {
-          setNotice(
-            "Tu ubicación está fuera de la región seleccionada. Selecciona un municipio.",
-          );
-          return;
-        }
-        setPlace(p);
-        setNotice("Ubicación aproximada seleccionada: " + p.name);
-      },
-      () =>
-        setNotice(
-          "No se obtuvo tu ubicación. Puedes escoger el municipio manualmente.",
-        ),
-      { timeout: 12000, maximumAge: 300000, enableHighAccuracy: false },
-    );
+    navigate("mapa");
+    setLocationRequested(true);
   };
   const toggleFavorite = () =>
     patch({
@@ -604,6 +570,8 @@ export default function App() {
         theme={settings.theme}
         unit={unit}
         onPlace={setPlace}
+        locationRequested={locationRequested}
+        onLocationConsumed={() => setLocationRequested(false)}
         onForecast={() => navigate("clima")}
         preview={view === "inicio"}
       />
@@ -849,7 +817,7 @@ export default function App() {
                 </select>
               </label>
               <button
-                aria-label="Usar mi ubicación aproximada"
+                aria-label="Mostrar mi ubicación GPS real"
                 onClick={locate}
               >
                 <LocateFixed size={19} />
@@ -1611,12 +1579,11 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </button>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.5">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.6">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
-                    la ubicación del municipio consultado; la ubicación GPS se
-                    usa solo para elegir el punto más cercano.
+                    la ubicación del municipio consultado; el GPS se usa para mostrar el marcador TÚ y un recorrido temporal en el mapa. No guardamos tu recorrido; el mapa base consulta teselas del área visible.
                   </p>
                   <p className="explain">
                     Geografía: US Census Gazetteer 2025 (78 municipios); Datos
