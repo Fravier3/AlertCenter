@@ -56,7 +56,7 @@ Las comprobaciones visuales en navegador cubren escritorio y un viewport móvil 
 
 ## Radar de lluvia (v1.0.5)
 
-La capa Radar de lluvia utiliza RainViewer Weather Maps API, gratuita sin clave para uso personal/no comercial. Muestra hasta 13 mosaicos observados de las últimas dos horas, con control de reproducción/pausa y fecha local. El manifiesto se guarda por cinco minutos; solo se consulta al activar la capa. La animación avanza cada ocho segundos y se pausa al ocultar la página para reducir solicitudes. Las teselas se limitan a la región seleccionada y a la resolución nativa máxima 7.
+La capa Radar de lluvia utiliza RainViewer Weather Maps API, gratuita sin clave para uso personal/no comercial. Muestra hasta 13 mosaicos observados de las últimas dos horas, con control de reproducción/pausa y fecha local. El manifiesto se guarda por cinco minutos; solo se consulta al activar la capa. La animación precarga la secuencia, avanza cada 200 ms y se pausa al ocultar la página para reducir solicitudes. Las teselas se limitan a la región seleccionada y a la resolución nativa máxima 7.
 
 La máscara del proveedor sombrea zonas sin cobertura. También se comprueba el píxel del centro representativo de la ubicación seleccionada; no se extrapola esa comprobación a todo el municipio. Si no puede leerse la máscara o falla una imagen, se avisa explícitamente. En la comprobación inicial San Juan tenía cobertura y Bogotá no; esto no garantiza la disponibilidad futura. Un mapa vacío no se presenta como ausencia de lluvia. La máscara del proveedor puede estar desactualizada.
 
@@ -69,3 +69,5 @@ Se elimina el marcador circular del centro del municipio. El botón superior Mos
 Se solicita alta precisión, sin reutilizar posiciones antiguas, con timeout de 25 segundos. La primera posición centra y amplía el mapa; las siguientes siguen el movimiento. El recorrido es temporal, se borra al detener o salir del mapa, y el seguimiento se pausa con la app oculta. Se distinguen permiso denegado, GPS no disponible y timeout, con ayuda para iPhone y reintento. No es posible verificar o cambiar remotamente los permisos del teléfono del usuario.
 
 La capa de radar inicia automáticamente al seleccionarla o volver a ella (v1.0.7), desde el primer fotograma. Conserva pausa manual y reinicia al reintentar. El avance sigue cada ocho segundos para limitar solicitudes; la interfaz muestra ese intervalo.
+
+En v1.0.8 el loop avanza cada 200 ms tras precargar los fotogramas del área visible. Se mantienen las capas montadas y se alterna su opacidad; no se recrean ni descargan las mismas teselas en cada vuelta. El estado muestra el progreso de precarga y espera a que todas las imágenes estén listas. Las solicitudes siguen limitadas a la región y al zoom nativo 7.

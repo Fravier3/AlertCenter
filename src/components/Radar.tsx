@@ -19,6 +19,11 @@ export function useRadar(active: boolean, place: Place) {
   const [tileError, setTileError] = useState(false);
   const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [readyFrames, setReadyFrames] = useState<Set<string>>(() => new Set());
+  const readyCount =
+    result?.data.frames.filter((f) => readyFrames.has(place.region + f.path))
+      .length ?? 0;
+  const framesReady = !!result && readyCount === result.data.frames.length;
   const [attempt, setAttempt] = useState(0);
   const [coverage, setCoverage] = useState<"yes" | "no" | "unknown">("unknown");
   useEffect(() => {
@@ -46,6 +51,7 @@ export function useRadar(active: boolean, place: Place) {
       .then((r) => {
         if (alive) {
           const data = normalizeRadarManifest(r.data);
+          setReadyFrames(old => new Set([...old].filter(key => data.frames.some(f => key.slice(2) === f.path))));
           setResult({ ...r, data });
           setIndex(0);
         }
@@ -105,21 +111,33 @@ export function useRadar(active: boolean, place: Place) {
     };
   }, [active, result?.data.host, place.id]);
   useEffect(() => {
-    if (!active || !playing || !result) return;
+    if (!active || !playing || !result || !framesReady || tileError) return;
     const id = setInterval(() => {
       if (document.visibilityState === "visible")
         setIndex((i) => (i + 1) % result.data.frames.length);
       else setPlaying(false);
-    }, 8000);
+    }, 200);
     return () => clearInterval(id);
-  }, [active, playing, result]);
+  }, [active, playing, result, framesReady, tileError]);
   useEffect(() => {
     setPlaying(active);
+    setReadyFrames(new Set());
     setIndex(0);
     setTileError(false);
   }, [active, place.region]);
   return {
     result,
+    readyCount,
+    framesReady,
+    markReady: (key: string) =>
+      setReadyFrames((old) => (old.has(key) ? old : new Set([...old, key]))),
+    markLoading: (key: string) =>
+      setReadyFrames((old) => {
+        if (!old.has(key)) return old;
+        const next = new Set(old);
+        next.delete(key);
+        return next;
+      }),
     loading,
     error,
     tileError,
@@ -134,6 +152,7 @@ export function useRadar(active: boolean, place: Place) {
       setPlaying(false);
     },
     retry: () => {
+      setReadyFrames(new Set());
       setPlaying(true);
       setResult(null);
       setAttempt((x) => x + 1);
@@ -179,16 +198,26 @@ export function RadarTiles({
         className="radar-coverage"
         eventHandlers={{ tileerror: radar.fail }}
       />
-      <TileLayer
-        {...props}
-        key={region + radar.frame.path}
-        url={radarTiles(radar.result.data.host, radar.frame)}
-        opacity={0.78}
-        zIndex={310}
-        className="radar-echoes"
-        attribution='<a href="https://www.rainviewer.com/">Weather data by RainViewer</a>'
-        eventHandlers={{ tileerror: radar.fail }}
-      />
+      {radar.result.data.frames.map((frame, i) => (
+        <TileLayer
+          {...props}
+          key={region + frame.path}
+          url={radarTiles(radar.result!.data.host, frame)}
+          opacity={i === radar.index ? 0.78 : 0}
+          zIndex={310}
+          className="radar-echoes"
+          attribution={
+            i === 0
+              ? '<a href="https://www.rainviewer.com/">Weather data by RainViewer</a>'
+              : undefined
+          }
+          eventHandlers={{
+            tileerror: radar.fail,
+            loading: () => radar.markLoading(region + frame.path),
+            load: () => radar.markReady(region + frame.path),
+          }}
+        />
+      ))}
     </>
   );
 }
@@ -213,7 +242,15 @@ export function RadarControls({
         </button>
       </div>
       {radar.loading && <p role="status">Consultando imágenes reales…</p>}
-      {radar.result && !radar.loading && <p className="source-caption" role="status">{radar.playing ? "Loop automático · la imagen cambia cada 8 segundos." : "Animación en pausa. Pulsa reproducir para continuar."}</p>}
+      {radar.result && !radar.loading && (
+        <p className="source-caption" role="status">
+          {!radar.framesReady
+            ? `Preparando loop rápido · ${radar.readyCount}/${radar.result.data.frames.length} imágenes listas…`
+            : radar.playing
+              ? "Loop automático rápido · 200 ms por imagen."
+              : "Animación en pausa. Pulsa reproducir para continuar."}
+        </p>
+      )}
       {radar.error && (
         <p role="alert" className="amber">
           {radar.error}
