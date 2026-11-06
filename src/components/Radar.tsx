@@ -47,7 +47,7 @@ export function useRadar(active: boolean, place: Place) {
         if (alive) {
           const data = normalizeRadarManifest(r.data);
           setResult({ ...r, data });
-          setIndex(data.frames.length - 1);
+          setIndex(0);
         }
       })
       .catch(() => {
@@ -114,9 +114,10 @@ export function useRadar(active: boolean, place: Place) {
     return () => clearInterval(id);
   }, [active, playing, result]);
   useEffect(() => {
-    setPlaying(false);
+    setPlaying(active);
+    setIndex(0);
     setTileError(false);
-  }, [place.region]);
+  }, [active, place.region]);
   return {
     result,
     loading,
@@ -133,6 +134,7 @@ export function useRadar(active: boolean, place: Place) {
       setPlaying(false);
     },
     retry: () => {
+      setPlaying(true);
       setResult(null);
       setAttempt((x) => x + 1);
     },
@@ -211,6 +213,7 @@ export function RadarControls({
         </button>
       </div>
       {radar.loading && <p role="status">Consultando imágenes reales…</p>}
+      {radar.result && !radar.loading && <p className="source-caption" role="status">{radar.playing ? "Loop automático · la imagen cambia cada 8 segundos." : "Animación en pausa. Pulsa reproducir para continuar."}</p>}
       {radar.error && (
         <p role="alert" className="amber">
           {radar.error}

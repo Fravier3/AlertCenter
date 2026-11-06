@@ -356,7 +356,7 @@ export default function MonitorMap({
           <button
             key={id}
             className={layer === id ? "selected" : ""}
-            onClick={() => setLayer(id)}
+            onClick={() => { setLayer(id); if (id === "radar") { radar.setIndex(0); radar.setPlaying(true); } }}
           >
             {label}
           </button>
