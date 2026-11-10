@@ -17,9 +17,8 @@ import {
   Heart,
   Home,
   LocateFixed,
-  Map as MapIcon,
-  Menu,
   Moon,
+  Radar,
   Radio,
   RefreshCw,
   Settings as SettingsIcon,
@@ -32,8 +31,8 @@ import {
   WifiOff,
   X,
   Download,
-  ExternalLink,
 } from "lucide-react";
+import { motion, MotionConfig } from "motion/react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import placesRaw from "./data/places.json";
 import type {
@@ -51,18 +50,19 @@ import {
   temp,
   weatherLabel,
   modelTime,
-  distance,
   aqiCategory,
   dailyQuakes,
   safeSettings,
 } from "./services/domain.mjs";
-import { WeatherIcon, Stamp, SourceLink, Empty } from "./components/UI";
+import { WeatherIcon, Stamp, SourceLink, Empty, Jelly, epicenter } from "./components/UI";
+import QuakeTable from "./components/QuakeTable";
 const MonitorMap = lazy(() => import("./components/MonitorMap"));
+const QuakeMap = lazy(() => import("./components/QuakeMap"));
 const Chart = lazy(() => import("./components/Chart"));
 const places = placesRaw as Place[];
 const nav = [
   { id: "inicio", name: "Inicio", icon: Home },
-  { id: "mapa", name: "Mapa", icon: MapIcon },
+  { id: "mapa", name: "Radar", icon: Radar },
   { id: "alertas", name: "Alertas", icon: Bell },
   { id: "sismos", name: "Sismos", icon: Activity },
   { id: "clima", name: "Clima", icon: CloudRain },
@@ -148,9 +148,6 @@ export default function App() {
   const [notice, setNotice] = useState("");
   const [query, setQuery] = useState("");
   const [days, setDays] = useState(7);
-  const [eventCategory, setEventCategory] = useState("todos");
-  const [eventSeverity, setEventSeverity] = useState("todos");
-  const [eventDate, setEventDate] = useState("");
   const [installPrompt, setInstallPrompt] = useState<any>(null);
   const [installHelp, setInstallHelp] = useState(false);
   const [now, setNow] = useState(Date.now());
@@ -399,7 +396,7 @@ export default function App() {
     ...quakes.map((f) => ({
       id: String(f.id),
       cat: "sismos",
-      title: `Sismo M ${f.properties.mag} · ${f.properties.place}`,
+      title: `Sismo M ${f.properties.mag} · ${epicenter(f.properties.place)}`,
       at: f.properties.time,
       source: "USGS · registro sísmico",
       url: f.properties.url,
@@ -417,15 +414,6 @@ export default function App() {
         : "otros",
     })),
   ]
-    .filter(
-      (e) =>
-        (eventCategory === "todos" || e.cat === eventCategory) &&
-        (eventSeverity === "todos" || e.severity === eventSeverity) &&
-        (!eventDate ||
-          new Intl.DateTimeFormat("sv-SE", { timeZone: zone }).format(
-            new Date(e.at),
-          ) === eventDate),
-    )
     .sort((a, b) => b.at - a.at);
   const forecast = (
     <Panel title="Los próximos 7 días" kicker="PLANIFICA TU SEMANA">
@@ -523,9 +511,11 @@ export default function App() {
           : "REGIÓN ANDINA CERCANA"
       }
       action={
-        <button className="text-button" onClick={() => navigate("sismos")}>
-          Ver todos <ArrowUpRight size={16} />
-        </button>
+        view !== "sismos" && (
+          <Jelly className="text-button" onClick={() => navigate("sismos")}>
+            Ver todos <ArrowUpRight size={16} />
+          </Jelly>
+        )
       }
     >
       <div className="quake-summary">
@@ -563,15 +553,11 @@ export default function App() {
     <Suspense fallback={<div className="panel empty">Cargando mapa…</div>}>
       <MonitorMap
         place={place}
-        places={places}
-        quakes={quakes}
-        alerts={shownAlerts}
         region={region}
         theme={settings.theme}
-        unit={unit}
-        onPlace={setPlace}
         locationRequested={locationRequested}
         onLocationConsumed={() => setLocationRequested(false)}
+        onOpen={() => navigate("mapa")}
         onForecast={() => navigate("clima")}
         preview={view === "inicio"}
       />
@@ -675,7 +661,7 @@ export default function App() {
     </>
   );
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <a className="skip" href="#main">
         Saltar al contenido
       </a>
@@ -689,12 +675,15 @@ export default function App() {
         <span className="sidebar-label">CENTRO DE MONITOREO</span>
         <nav>
           {nav.map((n) => (
-            <button
+            <Jelly
               key={n.id}
               className={view === n.id ? "active" : ""}
               onClick={() => navigate(n.id)}
               aria-current={view === n.id ? "page" : undefined}
             >
+              {view === n.id && (
+                <motion.span layoutId="side-pill" className="nav-pill" />
+              )}
               <n.icon size={20} />
               <span>{n.name}</span>
               {n.id === "alertas" &&
@@ -702,7 +691,7 @@ export default function App() {
                 shownAlerts.length > 0 && (
                   <span className="count">{shownAlerts.length}</span>
                 )}
-            </button>
+            </Jelly>
           ))}
         </nav>
         <div className="sidebar-bottom">
@@ -720,9 +709,9 @@ export default function App() {
             <br />
             Acceso gratuito, siempre.
           </small>
-          <button onClick={install}>
+          <Jelly onClick={install}>
             <Download size={16} /> Instalar aplicación
-          </button>
+          </Jelly>
         </div>
       </aside>
       <div className="app-shell">
@@ -732,25 +721,31 @@ export default function App() {
             <strong>PR Alert Center</strong>
           </div>
           <div className="region-switch" role="group" aria-label="Región">
-            <button
+            <Jelly
               className={region === "pr" ? "selected" : ""}
               onClick={() => setRegion("pr")}
             >
-              Puerto Rico
-            </button>
-            <button
+              {region === "pr" && (
+                <motion.span layoutId="region-pill" className="nav-pill" />
+              )}
+              <span>Puerto Rico</span>
+            </Jelly>
+            <Jelly
               className={region === "co" ? "selected" : ""}
               onClick={() => setRegion("co")}
             >
-              Bogotá y Cundinamarca
-            </button>
+              {region === "co" && (
+                <motion.span layoutId="region-pill" className="nav-pill" />
+              )}
+              <span>Bogotá y Cundinamarca</span>
+            </Jelly>
           </div>
           <div className="top-actions">
             <span className="local-clock">
               {fmt(now, false)}{" "}
               <small>{region === "pr" ? "AST · UTC−4" : "COT · UTC−5"}</small>
             </span>
-            <button
+            <Jelly
               aria-label="Cambiar apariencia"
               onClick={() =>
                 patch({ theme: settings.theme === "dark" ? "light" : "dark" })
@@ -761,8 +756,8 @@ export default function App() {
               ) : (
                 <Moon size={19} />
               )}
-            </button>
-            <button
+            </Jelly>
+            <Jelly
               aria-label="Actualizar datos"
               onClick={() => {
                 setNow(Date.now());
@@ -773,7 +768,7 @@ export default function App() {
               }}
             >
               <RefreshCw size={18} className={loading ? "spin" : ""} />
-            </button>
+            </Jelly>
           </div>
         </header>
         <main id="main">
@@ -816,13 +811,13 @@ export default function App() {
                     ))}
                 </select>
               </label>
-              <button
+              <Jelly
                 aria-label="Mostrar mi ubicación GPS real"
                 onClick={locate}
               >
                 <LocateFixed size={19} />
-              </button>
-              <button
+              </Jelly>
+              <Jelly
                 aria-label={
                   settings.favorites.includes(place.id)
                     ? "Quitar de favoritos"
@@ -838,7 +833,7 @@ export default function App() {
                       : "none"
                   }
                 />
-              </button>
+              </Jelly>
             </div>
           </div>
           {!online && (
@@ -859,19 +854,26 @@ export default function App() {
                 <strong>Algunas fuentes no están disponibles</strong>
                 <p>{apiErrors.map(([n, e]) => `${n}: ${e}`).join(" · ")}</p>
               </div>
-              <button onClick={() => setRefresh((x) => x + 1)}>
+              <Jelly onClick={() => setRefresh((x) => x + 1)}>
                 Reintentar
-              </button>
+              </Jelly>
             </div>
           )}
           {needsUpdate && (
             <div className="banner">
               Hay una nueva versión disponible.{" "}
-              <button onClick={() => updateServiceWorker(true)}>
+              <Jelly onClick={() => updateServiceWorker(true)}>
                 Actualizar aplicación
-              </button>
+              </Jelly>
             </div>
           )}
+          <motion.div
+            key={view}
+            className="view"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}
+          >
           {view === "inicio" && (
             <>
               <div className="dashboard-top">
@@ -957,12 +959,12 @@ export default function App() {
                         ? "Consulta guardada; verifica su fecha."
                         : "Fuente: National Weather Service · toda la isla"}
                   </p>
-                  <button
+                  <Jelly
                     className="wide-link"
                     onClick={() => navigate("alertas")}
                   >
                     Abrir centro de alertas <ArrowUpRight size={18} />
-                  </button>
+                  </Jelly>
                 </section>
               </div>
               <div className="metrics-grid">
@@ -1021,18 +1023,18 @@ export default function App() {
                   kicker="PRONÓSTICO · 24 HORAS"
                   action={
                     <div className="segmented">
-                      <button
+                      <Jelly
                         className={chartMode === "temp" ? "selected" : ""}
                         onClick={() => setChartMode("temp")}
                       >
                         Temperatura
-                      </button>
-                      <button
+                      </Jelly>
+                      <Jelly
                         className={chartMode === "rain" ? "selected" : ""}
                         onClick={() => setChartMode("rain")}
                       >
                         Lluvia
-                      </button>
+                      </Jelly>
                     </div>
                   }
                 >
@@ -1069,12 +1071,12 @@ export default function App() {
                 title="Actividad reciente"
                 kicker="REGISTROS VERIFICABLES"
                 action={
-                  <button
+                  <Jelly
                     className="text-button"
                     onClick={() => navigate("sismos")}
                   >
                     Explorar <ArrowUpRight size={15} />
-                  </button>
+                  </Jelly>
                 }
               >
                 <div className="timeline">
@@ -1108,26 +1110,7 @@ export default function App() {
               </Panel>
             </>
           )}
-          {view === "mapa" && (
-            <>
-              {map}
-              <div className="info-grid">
-                <Panel title="Capas con datos reales" kicker="LECTURA DEL MAPA">
-                  <p className="explain">
-                    Los puntos meteorológicos son muestras de Open-Meteo; no
-                    representan un radar ni una superficie continua. El mapa de
-                    sismos se filtra con el umbral de Ajustes. Las alertas NWS
-                    se dibujan solo cuando incluyen geometría.
-                  </p>
-                </Panel>
-                <Panel title="Disponibilidad" kicker="TRANSPARENCIA">
-                  <p className="explain">
-                    El radar muestra lluvia observada de RainViewer, con cobertura y fecha visibles; no ofrece imágenes futuras. Las zonas sin cobertura están sombreadas. La lluvia futura por hora y el aire modelado están en Clima. El mapa requiere conexión.
-                  </p>
-                </Panel>
-              </div>
-            </>
-          )}
+          {view === "mapa" && map}
           {view === "alertas" && (
             <div className="alert-layout">{alertsPanel}</div>
           )}
@@ -1158,139 +1141,63 @@ export default function App() {
                   </select>
                 </label>
                 <label>
-                  Buscar
+                  Buscar epicentro
                   <input
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Lugar del evento"
+                    placeholder="Lugar del sismo"
                   />
                 </label>
               </div>
-              <div className="dashboard-middle">
-                {quakeSummary}
-                {map}
-              </div>
               <Panel
-                title="Últimos terremotos"
-                kicker="USGS · EVENTOS REGISTRADOS"
+                title="Sismos registrados"
+                kicker="USGS · EPICENTRO, DÍA, HORA Y MAGNITUD"
               >
-                <div className="quake-list">
-                  {quakes
-                    .filter((f) =>
-                      String(f.properties.place)
-                        .toLocaleLowerCase()
-                        .includes(query.toLocaleLowerCase()),
-                    )
-                    .slice(0, 100)
-                    .map((f) => (
-                      <a
-                        key={String(f.id)}
-                        href={f.properties.url}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <span className="magnitude">
-                          {f.properties.mag.toFixed(1)}
-                          <small>MAGNITUD</small>
-                        </span>
-                        <div>
-                          <strong>{f.properties.place}</strong>
-                          <small>
-                            {fmt(f.properties.time)} ·{" "}
-                            {f.geometry.coordinates[2].toFixed(1)} km de
-                            profundidad
-                          </small>
-                          <small>
-                            {Math.round(
-                              distance(
-                                place.lat,
-                                place.lon,
-                                f.geometry.coordinates[1],
-                                f.geometry.coordinates[0],
-                              ),
-                            )}{" "}
-                            km de {place.name} ·{" "}
-                            {f.geometry.coordinates[1].toFixed(3)},{" "}
-                            {f.geometry.coordinates[0].toFixed(3)}
-                          </small>
-                        </div>
-                        <ArrowUpRight size={18} />
-                      </a>
-                    ))}
-                  {!quakes.length && (
-                    <Empty
-                      text={
-                        q.loading
-                          ? "Consultando USGS…"
-                          : q.error
-                            ? "No se recibieron datos sísmicos."
-                            : "Sin eventos con los filtros actuales."
-                      }
-                    />
+                <QuakeTable
+                  key={region + days + settings.mag + query}
+                  quakes={quakes.filter((f) =>
+                    String(f.properties.place)
+                      .toLocaleLowerCase()
+                      .includes(query.toLocaleLowerCase()),
                   )}
-                </div>
+                  zone={zone}
+                  place={place}
+                  empty={
+                    q.loading
+                      ? "Consultando USGS…"
+                      : q.error
+                        ? "No se recibieron datos sísmicos."
+                        : "Sin sismos con los filtros actuales."
+                  }
+                />
                 <Stamp result={q.result} zone={zone} />
-                <p className="explain">
-                  Cobertura{" "}
+                <p className="source-caption">
+                  Hora local de {region === "pr" ? "Puerto Rico" : "Colombia"} ·
+                  cobertura{" "}
                   {region === "pr" ? "16–21° N, 70–63° O" : "2–8° N, 77–71° O"}.
-                  Los registros pueden ser revisados por USGS. No es un sistema
-                  de alerta sísmica temprana ni una predicción.
+                  USGS puede revisar los registros. No es una alerta sísmica
+                  temprana ni una predicción.
                 </p>
               </Panel>
-              <Panel title="Cronología de actividad" kicker="ALERTAS + SISMOS">
-                <div className="filters">
-                  <label>
-                    Categoría
-                    <select
-                      value={eventCategory}
-                      onChange={(e) => setEventCategory(e.target.value)}
-                    >
-                      <option value="todos">Todas</option>
-                      <option value="sismos">Sismos</option>
-                      <option value="alertas">Alertas oficiales</option>
-                    </select>
-                  </label>
-                  <label>
-                    Relevancia
-                    <select
-                      value={eventSeverity}
-                      onChange={(e) => setEventSeverity(e.target.value)}
-                    >
-                      <option value="todos">Todos</option>
-                      <option value="destacados">
-                        M ≥ 4 / alertas severas o extremas
-                      </option>
-                      <option value="otros">Otros registros</option>
-                    </select>
-                  </label>
-                  <label>
-                    Fecha local
-                    <input
-                      type="date"
-                      value={eventDate}
-                      onChange={(e) => setEventDate(e.target.value)}
+              <div className="dashboard-middle">
+                <Panel title="Epicentros" kicker="TOCA UN PUNTO PARA VER EL DETALLE">
+                  <Suspense fallback={<div className="map-wrap quake-map skeleton" />}>
+                    <QuakeMap
+                      quakes={quakes}
+                      region={region}
+                      theme={settings.theme}
+                      zone={zone}
                     />
-                  </label>
-                </div>
-                <div className="timeline">
-                  {eventList.slice(0, 40).map((e) => (
-                    <a href={e.url} key={e.id} target="_blank" rel="noreferrer">
-                      <Activity size={20} className="violet" />
-                      <div>
-                        <strong>{e.title}</strong>
-                        <small>
-                          {fmt(e.at)} · {e.source}
-                        </small>
-                      </div>
-                      <ExternalLink size={15} />
-                    </a>
-                  ))}
-                  {!eventList.length && (
-                    <Empty text="Sin registros para estos filtros." />
-                  )}
-                </div>
-              </Panel>
+                  </Suspense>
+                  <div className="mag-legend">
+                    <span><i className="mag-dot low" />M menor de 3</span>
+                    <span><i className="mag-dot mid" />M 3 a 4.4</span>
+                    <span><i className="mag-dot high" />M 4.5 o más</span>
+                  </div>
+                </Panel>
+                {quakeSummary}
+              </div>
             </>
           )}
           {view === "clima" && (
@@ -1301,7 +1208,7 @@ export default function App() {
                 <h2>{t(current?.temperature_2m)}{degree} {secondaryTemperature(current?.temperature_2m)} · {current ? weatherLabel(current.weather_code) : "Consultando clima…"}</h2>
                 <p>Condiciones de modelo · animación ambiental ilustrativa</p>
                 <div className="unit-switch" role="group" aria-label="Unidad de temperatura de esta región">
-                  {(["f", "c"] as const).map(u => <button key={u} aria-pressed={unit === u} onClick={() => setUnit(u)}>°{u.toUpperCase()}</button>)}
+                  {(["f", "c"] as const).map(u => <Jelly key={u} aria-pressed={unit === u} onClick={() => setUnit(u)}>°{u.toUpperCase()}</Jelly>)}
                 </div>
               </section>
               <div className="metrics-grid detailed">
@@ -1428,7 +1335,7 @@ export default function App() {
                 </p>
                 <p className="explain">
                   {region === "pr"
-                    ? "En Mapa puedes consultar estaciones NWS y abrir sus observaciones oficiales."
+                    ? "Para observaciones de estaciones, consulta NWS San Juan en las fuentes oficiales de Alertas."
                     : "Para mediciones de estaciones, consulta RMCAB en las fuentes oficiales de Alertas."}
                 </p>
               </Panel>
@@ -1523,10 +1430,10 @@ export default function App() {
                     const p = places.find((p) => p.id === id)!;
                     return (
                       <div key={id}>
-                        <button onClick={() => setPlace(p)}>
+                        <Jelly onClick={() => setPlace(p)}>
                           {p.name} <ChevronRight size={15} />
-                        </button>
-                        <button
+                        </Jelly>
+                        <Jelly
                           aria-label={"Quitar favorito " + p.name}
                           onClick={() =>
                             patch({
@@ -1537,7 +1444,7 @@ export default function App() {
                           }
                         >
                           <X size={16} />
-                        </button>
+                        </Jelly>
                       </div>
                     );
                   })}
@@ -1559,7 +1466,7 @@ export default function App() {
                     con la app cerrada. No se contratan servidores ni servicios
                     de pago.
                   </p>
-                  <button
+                  <Jelly
                     className="primary"
                     onClick={
                       settings.notify ? () => patch({ notify: false }) : notify
@@ -1567,7 +1474,7 @@ export default function App() {
                   >
                     <Bell size={17} />
                     {settings.notify ? "Desactivar avisos" : "Activar avisos"}
-                  </button>
+                  </Jelly>
                   <h3>Instala PR Alert Center</h3>
                   <p className="explain">
                     En iPhone: Safari → Compartir → Añadir a pantalla de inicio.
@@ -1575,15 +1482,15 @@ export default function App() {
                     compatible. La caché permite consultar información guardada,
                     con su fecha visible.
                   </p>
-                  <button onClick={install}>
+                  <Jelly onClick={install}>
                     <Download size={17} /> Instalar aplicación
-                  </button>
+                  </Jelly>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.0.8">
+                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.1.0">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
-                    la ubicación del municipio consultado; el GPS se usa para mostrar el marcador TÚ y un recorrido temporal en el mapa. No guardamos tu recorrido; el mapa base consulta teselas del área visible.
+                    la ubicación del municipio consultado; el GPS solo se usa para mostrar el marcador TÚ en el radar y no se guarda. El mapa consulta las teselas del área visible.
                   </p>
                   <p className="explain">
                     Geografía: US Census Gazetteer 2025 (78 municipios); Datos
@@ -1609,6 +1516,12 @@ export default function App() {
                       USGS
                     </SourceLink>
                     <SourceLink url="https://www.weather.gov/">NWS</SourceLink>
+                    <SourceLink url="https://www.rainviewer.com/">
+                      RainViewer
+                    </SourceLink>
+                    <SourceLink url="https://openfreemap.org/">
+                      OpenFreeMap
+                    </SourceLink>
                     <SourceLink url="https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2025_Gazetteer/">
                       Census Gazetteer
                     </SourceLink>
@@ -1619,7 +1532,7 @@ export default function App() {
                       IDECA
                     </SourceLink>
                   </div>
-                  <button
+                  <Jelly
                     onClick={() => {
                       navigator.serviceWorker
                         ?.getRegistration()
@@ -1631,11 +1544,12 @@ export default function App() {
                     }}
                   >
                     <RefreshCw size={16} /> Comprobar actualizaciones
-                  </button>
+                  </Jelly>
                 </Panel>
               </div>
             </div>
           )}
+          </motion.div>
           <footer>
             <span>
               PR ALERT CENTER <span className="footer-dot">/</span> TU ENTORNO,
@@ -1643,35 +1557,38 @@ export default function App() {
             </span>
             <small>
               Open-Meteo · CAMS · USGS · NWS{" "}
-              <button
+              <Jelly
                 className="text-button"
                 onClick={() => navigate("ajustes")}
               >
                 Fuentes y alcance ↗
-              </button>
+              </Jelly>
             </small>
           </footer>
         </main>
       </div>
       <nav className="bottom-nav" aria-label="Navegación móvil">
         {nav.map((n) => (
-          <button
+          <Jelly
             key={n.id}
             className={view === n.id ? "active" : ""}
             onClick={() => navigate(n.id)}
             aria-current={view === n.id ? "page" : undefined}
           >
+            {view === n.id && (
+              <motion.span layoutId="dock-pill" className="nav-pill" />
+            )}
             <n.icon size={20} />
             <span>{n.name}</span>
-          </button>
+          </Jelly>
         ))}
       </nav>
       {notice && (
         <div className="toast" role="status">
           {notice}
-          <button aria-label="Cerrar aviso" onClick={() => setNotice("")}>
+          <Jelly aria-label="Cerrar aviso" onClick={() => setNotice("")}>
             <X size={16} />
-          </button>
+          </Jelly>
         </div>
       )}
       {installHelp && (
@@ -1683,14 +1600,14 @@ export default function App() {
             className="modal"
             onClick={(e) => e.stopPropagation()}
           >
-            <button
+            <Jelly
               className="modal-close"
               aria-label="Cerrar instrucciones"
               onClick={() => setInstallHelp(false)}
               autoFocus
             >
               <X size={20} />
-            </button>
+            </Jelly>
             <img src={import.meta.env.BASE_URL + "icon-192.png"} alt="" />
             <h2 id="install-title">
               Tu centro de monitoreo,
@@ -1704,12 +1621,12 @@ export default function App() {
               Android y computadora: abre el menú del navegador y selecciona
               «Instalar aplicación» cuando esté disponible.
             </p>
-            <button className="primary" onClick={() => setInstallHelp(false)}>
+            <Jelly className="primary" onClick={() => setInstallHelp(false)}>
               Entendido
-            </button>
+            </Jelly>
           </section>
         </div>
       )}
-    </>
+    </MotionConfig>
   );
 }

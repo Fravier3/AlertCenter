@@ -8,7 +8,27 @@ import {
   Moon,
   ExternalLink,
 } from "lucide-react";
+import { motion, type HTMLMotionProps } from "motion/react";
 import type { Result } from "../types";
+/** Glass button with a springy, jelly-like press. */
+export function Jelly(props: HTMLMotionProps<"button">) {
+  return (
+    <motion.button
+      whileHover={{ scale: 1.04, y: -1 }}
+      whileTap={{ scaleX: 1.07, scaleY: 0.88 }}
+      transition={{ type: "spring", stiffness: 520, damping: 12, mass: 0.7 }}
+      {...props}
+    />
+  );
+}
+export const magTone = (mag: number) =>
+  mag >= 4.5 ? "high" : mag >= 3 ? "mid" : "low";
+/** USGS describes epicentres in English ("5 km SSE of Guánica"). */
+export const epicenter = (place: unknown) =>
+  String(place ?? "Ubicación sin describir").replace(
+    /^(\d+(?:\.\d+)?) km ([NSEW]{1,3}) of /,
+    (_, km, dir) => `${km} km al ${dir.replace(/W/g, "O")} de `,
+  );
 export function WeatherIcon({
   code = 3,
   day = true,

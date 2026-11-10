@@ -1,7 +1,7 @@
 {
   "name": "pr-alert-center",
   "private": true,
-  "version": "1.0.8",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
@@ -10,21 +10,20 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
+    "lucide-react": "^0.553.0",
+    "maplibre-gl": "^5.24.0",
+    "motion": "^14.12.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "leaflet": "^1.9.4",
-    "react-leaflet": "^5.0.0",
-    "recharts": "^3.3.0",
-    "lucide-react": "^0.553.0"
+    "recharts": "^3.3.0"
   },
   "devDependencies": {
-    "typescript": "^5.9.0",
-    "vite": "^7.2.0",
-    "@vitejs/plugin-react": "^5.1.0",
-    "vite-plugin-pwa": "^1.1.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@types/leaflet": "^1.9.21",
-    "sharp": "^0.34.0"
+    "@vitejs/plugin-react": "^5.1.0",
+    "sharp": "^0.34.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.2.0",
+    "vite-plugin-pwa": "^1.1.0"
   }
 }
