@@ -121,51 +121,6 @@ export async function alerts(region: Region) {
   );
   return { ...r, data: { ...r.data, features: activeAlerts(r.data.features) } };
 }
-export function stations() {
-  return cached<{ features: Feature[] }>(
-    "stations:pr",
-    "https://api.weather.gov/stations?state=PR&limit=100",
-    86400000,
-    (x) => Array.isArray(x.features),
-  );
-}
-export function observation(url: string) {
-  return cached<{ properties: any }>(
-    "obs:" + url,
-    url + "/observations/latest",
-    600000,
-    (x) => !!x.properties,
-  );
-}
-export function sampleWeather(places: Place[], region: Region) {
-  const p = places
-    .filter((x) => x.region === region && !x.id.startsWith("bog-"))
-    .filter(
-      (_, i) =>
-        i %
-          Math.ceil(
-            places.filter(
-              (x) => x.region === region && !x.id.startsWith("bog-"),
-            ).length / 12,
-          ) ===
-        0,
-    );
-  const q = new URLSearchParams({
-    latitude: p.map((x) => x.lat).join(","),
-    longitude: p.map((x) => x.lon).join(","),
-    current: "temperature_2m,precipitation,wind_speed_10m",
-    timezone: zones[region],
-  });
-  return cached<any[]>(
-    "samples:" + region,
-    "https://api.open-meteo.com/v1/forecast?" + q,
-    1800000,
-    (x) => Array.isArray(x) && x.length === p.length,
-  ).then((r) => ({
-    ...r,
-    data: r.data.map((x, i) => ({ ...p[i], ...x.current })),
-  }));
-}
 export const sources = {
   pr: [
     {
