@@ -39,7 +39,7 @@ export function createMap(
     container,
     style: `https://tiles.openfreemap.org/styles/${theme === "dark" ? "fiord" : "positron"}`,
     attributionControl: { compact: true },
-    minZoom: 4,
+    minZoom: 2,
     maxZoom: 13,
     dragRotate: false,
     pitchWithRotate: false,
@@ -47,12 +47,6 @@ export function createMap(
       "NavigationControl.ZoomIn": "Acercar",
       "NavigationControl.ZoomOut": "Alejar",
       "AttributionControl.ToggleAttribution": "Mostrar atribución",
-      "CooperativeGesturesHandler.WindowsHelpText":
-        "Usa Ctrl + la rueda del ratón para acercar el mapa",
-      "CooperativeGesturesHandler.MacHelpText":
-        "Usa ⌘ + la rueda del ratón para acercar el mapa",
-      "CooperativeGesturesHandler.MobileHelpText":
-        "Usa dos dedos para mover el mapa",
     },
     ...options,
   });

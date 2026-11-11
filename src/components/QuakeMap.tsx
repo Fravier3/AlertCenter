@@ -24,7 +24,6 @@ export default function QuakeMap({
     const map = createMap(el.current!, theme, {
       bounds: [b.minlongitude, b.minlatitude, b.maxlongitude, b.maxlatitude],
       fitBoundsOptions: { padding: 10 },
-      cooperativeGestures: true,
     });
     mapRef.current = map;
     map.on("style.load", () => setStyleRev((v) => v + 1));

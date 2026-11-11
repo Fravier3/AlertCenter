@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
-
 /* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
   --bg: #050914;
@@ -374,6 +372,33 @@ input:focus {
 .view > :nth-child(n + 4) {
   animation-delay: 0.18s;
 }
+.badge {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, currentColor 32%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  box-shadow:
+    inset 0 1px 0 var(--sheen-a),
+    0 0 26px -8px currentColor;
+}
+.panel-title {
+  flex: 1;
+  min-width: 0;
+}
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+h1 .badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+}
 .panel-heading,
 .map-toolbar {
   display: flex;
@@ -491,6 +516,11 @@ input:focus {
 }
 .brand:hover {
   text-decoration: none;
+}
+.brand img,
+.mobile-brand img,
+.modal img {
+  border-radius: 28%;
 }
 .brand img {
   width: 44px;
@@ -1341,8 +1371,7 @@ footer small {
   position: absolute;
   inset: 0;
 }
-.map-chip,
-.radar-hud {
+.map-chip {
   position: absolute;
   z-index: 3;
   border: 1px solid var(--edge);
@@ -1365,18 +1394,17 @@ footer small {
   font-weight: 600;
 }
 .radar-hud {
-  bottom: 14px;
-  left: 14px;
   display: grid;
-  gap: 10px;
-  width: min(420px, calc(100% - 28px));
-  padding: 14px 16px;
-  border-radius: 22px;
+  grid-template-columns: auto minmax(120px, 1fr) minmax(150px, 220px);
+  align-items: center;
+  gap: 12px 22px;
+  padding: 14px 24px;
+  border-top: 1px solid var(--line);
+  background: var(--inset);
 }
 .radar-hud-time {
   display: flex;
   align-items: baseline;
-  justify-content: space-between;
   gap: 12px;
 }
 .radar-hud-time strong {
@@ -1754,20 +1782,90 @@ footer small {
 }
 .alert-title {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+  gap: 14px;
+}
+.alert-title .tag {
+  color: var(--tone);
+}
+.alert-title h3 {
+  margin-top: 8px;
+  font-size: 19px;
+  letter-spacing: -0.02em;
+}
+.alert-icon {
+  display: inline-grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid color-mix(in srgb, var(--tone) 45%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--tone) 16%, transparent);
+  color: var(--tone);
+  box-shadow: 0 0 30px -8px var(--tone);
+}
+.alert-area {
+  margin-top: 12px;
+  color: var(--text);
+  font-size: 14.5px;
+  font-weight: 600;
+}
+.alert-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.alert-chips span {
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--inset);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.alert-body {
+  display: grid;
   gap: 10px;
+  margin-top: 14px;
+  transition: opacity 0.3s;
 }
-.alert-item h3 {
-  margin: 12px 0 8px;
+.alert-body.loading {
+  opacity: 0.45;
 }
-.alert-item p {
-  font-size: 14px;
+.alert-body p {
+  font-size: 14.5px;
+}
+.alert-advice {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--tone) 30%, transparent);
+  border-radius: 16px;
+  background: var(--inset);
+}
+.alert-advice strong {
+  color: var(--tone);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.alert-translation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 12.5px;
 }
 .alert-item details {
-  margin: 12px 0;
+  margin-top: 8px;
   color: var(--cyan);
   font-size: 14px;
+}
+.alert-item details p {
+  margin-top: 8px;
+  font-size: 13.5px;
 }
 .preline {
   margin-top: 10px;
@@ -2404,6 +2502,19 @@ footer small {
   }
   .map-notes {
     padding: 18px;
+  }
+  .radar-hud {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px 18px;
+  }
+  .radar-hud-time {
+    justify-content: space-between;
+  }
+  h1 .badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 15px;
   }
   .radar-future {
     flex-direction: column;

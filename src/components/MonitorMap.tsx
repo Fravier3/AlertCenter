@@ -11,11 +11,6 @@ import { watchDeviceLocation } from "../services/geolocation.mjs";
 const FRAME_MS = 200;
 /** Extra ticks spent on the newest image before the loop restarts. */
 const HOLD_TICKS = 6;
-/** Radar tiles are only requested inside these boxes. */
-const radarBox: Record<Region, [number, number, number, number]> = {
-  pr: [-69, 17, -64, 20],
-  co: [-76, 3, -72, 7],
-};
 const legend = [
   ["Llovizna", "#00a3e0"],
   ["Ligera", "#005588"],
@@ -64,7 +59,6 @@ export default function MonitorMap({
     const map = createMap(el.current!, theme, {
       bounds: regionBox[region],
       fitBoundsOptions: { padding: 24 },
-      cooperativeGestures: preview,
     });
     mapRef.current = map;
     map.on("style.load", () => setStyleRev((v) => v + 1));
@@ -104,7 +98,6 @@ export default function MonitorMap({
         tiles: [tiles],
         tileSize: 256,
         maxzoom: 7,
-        bounds: radarBox[region],
         attribution:
           id === "rv-coverage"
             ? '<a href="https://www.rainviewer.com/" target="_blank" rel="noreferrer">Weather data by RainViewer</a>'
@@ -268,41 +261,41 @@ export default function MonitorMap({
             </>
           )}
         </div>
-        {frame && (
-          <div className="radar-hud">
-            <div className="radar-hud-time">
-              <strong>
-                {new Date(frame.time * 1000).toLocaleTimeString("es-PR", {
-                  timeZone: zones[region],
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </strong>
-              <span>
-                {index === frames.length - 1 ? "Más reciente · " : ""}hace{" "}
-                {minutes} min
-              </span>
-            </div>
-            <div className="radar-ticks" aria-hidden="true">
-              {frames.map((f, i) => (
-                <i
-                  key={f.path}
-                  className={i === index ? "on" : i < index ? "past" : ""}
-                />
-              ))}
-            </div>
-            <div className="radar-scale" aria-label="Intensidad de la lluvia">
-              <span>Ligera</span>
-              <i
-                style={{
-                  background: `linear-gradient(90deg, ${legend.map((l) => l[1]).join(",")})`,
-                }}
-              />
-              <span>Extrema</span>
-            </div>
-          </div>
-        )}
       </div>
+      {frame && (
+        <div className="radar-hud">
+          <div className="radar-hud-time">
+            <strong>
+              {new Date(frame.time * 1000).toLocaleTimeString("es-PR", {
+                timeZone: zones[region],
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </strong>
+            <span>
+              {index === frames.length - 1 ? "Más reciente · " : ""}hace{" "}
+              {minutes} min
+            </span>
+          </div>
+          <div className="radar-ticks" aria-hidden="true">
+            {frames.map((f, i) => (
+              <i
+                key={f.path}
+                className={i === index ? "on" : i < index ? "past" : ""}
+              />
+            ))}
+          </div>
+          <div className="radar-scale" aria-label="Intensidad de la lluvia">
+            <span>Ligera</span>
+            <i
+              style={{
+                background: `linear-gradient(90deg, ${legend.map((l) => l[1]).join(",")})`,
+              }}
+            />
+            <span>Extrema</span>
+          </div>
+        </div>
+      )}
       {!preview && (
         <div className="map-notes">
           {radar.coverage === "no" && (

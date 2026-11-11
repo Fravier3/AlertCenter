@@ -1,6 +1,14 @@
 import WeatherSky from "./components/WeatherSky";
 import ModelSignals from "./components/ModelSignals";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Activity,
   ArrowDown,
@@ -31,6 +39,16 @@ import {
   WifiOff,
   X,
   Download,
+  CalendarDays,
+  ChartLine,
+  Clock,
+  Database,
+  Info,
+  Landmark,
+  MapPinned,
+  SlidersHorizontal,
+  Table2,
+  type LucideIcon,
 } from "lucide-react";
 import { motion, MotionConfig } from "motion/react";
 import { useRegisterSW } from "virtual:pwa-register/react";
@@ -55,6 +73,8 @@ import {
   safeSettings,
 } from "./services/domain.mjs";
 import { WeatherIcon, Stamp, SourceLink, Empty, Jelly, epicenter } from "./components/UI";
+import AlertCard from "./components/AlertCard";
+import { eventEs } from "./services/alertsEs.mjs";
 import QuakeTable from "./components/QuakeTable";
 const MonitorMap = lazy(() => import("./components/MonitorMap"));
 const QuakeMap = lazy(() => import("./components/QuakeMap"));
@@ -68,28 +88,30 @@ const nav = [
   { id: "clima", name: "Clima", icon: CloudRain },
   { id: "ajustes", name: "Ajustes", icon: SettingsIcon },
 ];
-const severityNames: Record<string, string> = {
-  Extreme: "Extrema",
-  Severe: "Severa",
-  Moderate: "Moderada",
-  Minor: "Menor",
-  Unknown: "No especificada",
-};
 function Panel({
   title,
   kicker,
   children,
   action,
+  icon: Icon,
+  tone = "cyan",
 }: {
   title: string;
   kicker?: string;
+  icon?: LucideIcon;
+  tone?: string;
   children: React.ReactNode;
   action?: React.ReactNode;
 }) {
   return (
     <section className="panel">
       <div className="panel-heading">
-        <div>
+        {Icon && (
+          <span className={"badge " + tone}>
+            <Icon size={20} />
+          </span>
+        )}
+        <div className="panel-title">
           {kicker && <span className="eyebrow">{kicker}</span>}
           <h2>{title}</h2>
         </div>
@@ -142,6 +164,9 @@ export default function App() {
       ? location.hash.slice(1)
       : "inicio",
   );
+  useLayoutEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [view]);
   const [refresh, setRefresh] = useState(0);
   const [locationRequested, setLocationRequested] = useState(false);
   const [online, setOnline] = useState(navigator.onLine);
@@ -162,7 +187,6 @@ export default function App() {
   const navigate = (v: string) => {
     setView(v);
     location.hash = v;
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const setPlace = (p: Place) => {
     patch({ placeId: p.id, region: p.region });
@@ -321,8 +345,8 @@ export default function App() {
       })),
       ...shownAlerts.map((f) => ({
         id: String(f.id),
-        title: f.properties.event,
-        text: f.properties.headline,
+        title: eventEs(f.properties.event),
+        text: f.properties.areaDesc,
       })),
     ];
     if (baseline.current !== region) {
@@ -382,6 +406,7 @@ export default function App() {
         : "No se activaron los avisos. Puedes seguir usando toda la aplicación.",
     );
   };
+  const ViewIcon = nav.find((n) => n.id === view)?.icon ?? Home;
   const apiErrors = [
     ["Clima", w.error],
     ["Aire", a.error],
@@ -405,7 +430,7 @@ export default function App() {
     ...shownAlerts.map((f) => ({
       id: String(f.id),
       cat: "alertas",
-      title: f.properties.headline || f.properties.event,
+      title: `${eventEs(f.properties.event)} · ${f.properties.areaDesc}`,
       at: Date.parse(f.properties.sent),
       source: "NWS · alerta oficial",
       url: f.properties["@id"] || f.properties.id,
@@ -416,7 +441,8 @@ export default function App() {
   ]
     .sort((a, b) => b.at - a.at);
   const forecast = (
-    <Panel title="Los próximos 7 días" kicker="PLANIFICA TU SEMANA">
+    <Panel title="Los próximos 7 días"
+      icon={CalendarDays} kicker="PLANIFICA TU SEMANA">
       <div className="forecast-list">
         {daily ? (
           daily.time.map((date: string, i: number) => (
@@ -457,8 +483,8 @@ export default function App() {
   const airPanel = (
     <Panel
       title="Calidad del aire"
+      icon={Wind} tone="mint"
       kicker="MODELO CAMS · US AQI"
-      action={<Wind size={21} className="mint" />}
     >
       <div className="aq-main">
         <strong style={{ color: aq.color }}>
@@ -505,6 +531,7 @@ export default function App() {
   const quakeSummary = (
     <Panel
       title="Actividad sísmica"
+      icon={Activity} tone="violet"
       kicker={
         region === "pr"
           ? "PUERTO RICO + CARIBE CERCANO"
@@ -567,10 +594,10 @@ export default function App() {
     <>
       <Panel
         title="Alertas oficiales"
+      icon={ShieldCheck} tone="amber"
         kicker={
           region === "pr" ? "NATIONAL WEATHER SERVICE" : "BOGOTÁ Y CUNDINAMARCA"
         }
-        action={<ShieldCheck className="cyan" size={23} />}
       >
         {region === "co" ? (
           <div className="official-empty">
@@ -604,48 +631,20 @@ export default function App() {
         ) : (
           <div className="alerts-list">
             {shownAlerts.map((f) => (
-              <article
-                className={"alert-item " + f.properties.severity.toLowerCase()}
-                key={String(f.id)}
-              >
-                <div className="alert-title">
-                  <span className="tag amber">
-                    OFICIAL · {severityNames[f.properties.severity]}
-                  </span>
-                  <strong>{f.properties.event}</strong>
-                </div>
-                <h3>{f.properties.headline}</h3>
-                <p>{f.properties.areaDesc}</p>
-                <details>
-                  <summary>Descripción e instrucciones</summary>
-                  <p className="preline">{f.properties.description}</p>
-                  <p className="preline">{f.properties.instruction}</p>
-                </details>
-                <div className="alert-meta">
-                  <span>
-                    Emitida {fmt(f.properties.sent)}
-                    <br />
-                    Vigente hasta {fmt(f.properties.expires)}
-                    <br />
-                    {f.properties.senderName}
-                  </span>
-                  <SourceLink url={f.properties["@id"] || f.properties.id}>
-                    Fuente NWS
-                  </SourceLink>
-                </div>
-              </article>
+              <AlertCard key={String(f.id)} alert={f} fmt={fmt} />
             ))}
           </div>
         )}
         <Stamp result={al.result} zone={zone} />
         {region === "pr" && (
           <p className="source-caption">
-            Cobertura: toda la isla · texto original de NWS, que puede estar en
-            inglés.
+            Cobertura: toda la isla. NWS publica en inglés; la traducción es
+            automática y el original queda disponible en cada alerta.
           </p>
         )}
       </Panel>
-      <Panel title="Fuentes oficiales" kicker="VERIFICA EN EL ORIGEN">
+      <Panel title="Fuentes oficiales"
+      icon={Landmark} tone="mint" kicker="VERIFICA EN EL ORIGEN">
         <div className="source-list">
           {api.sources[region].map((s) => (
             <a href={s.url} target="_blank" rel="noreferrer" key={s.name}>
@@ -669,7 +668,7 @@ export default function App() {
         <a className="brand" href="#inicio" onClick={() => navigate("inicio")}>
           <img src={import.meta.env.BASE_URL + "icon.svg"} alt="" />
           <span>
-            PR ALERT<span>CENTER</span>
+            ALERT<span>CENTER</span>
           </span>
         </a>
         <span className="sidebar-label">CENTRO DE MONITOREO</span>
@@ -718,7 +717,7 @@ export default function App() {
         <header className="topbar">
           <div className="mobile-brand">
             <img src={import.meta.env.BASE_URL + "icon.svg"} alt="" />
-            <strong>PR Alert Center</strong>
+            <strong>Alert Center</strong>
           </div>
           <div className="region-switch" role="group" aria-label="Región">
             <Jelly
@@ -779,6 +778,9 @@ export default function App() {
                 {online ? "MONITOREO DE TU ENTORNO" : "SIN CONEXIÓN"}
               </div>
               <h1>
+                <span className="badge cyan">
+                  <ViewIcon size={26} />
+                </span>
                 {view === "inicio"
                   ? "Una mirada a tu región."
                   : nav.find((n) => n.id === view)?.name ||
@@ -1020,6 +1022,7 @@ export default function App() {
               <div className="dashboard-middle">
                 <Panel
                   title="Así vienen las próximas horas"
+      icon={ChartLine}
                   kicker="PRONÓSTICO · 24 HORAS"
                   action={
                     <div className="segmented">
@@ -1069,6 +1072,7 @@ export default function App() {
               {forecast}
               <Panel
                 title="Actividad reciente"
+      icon={Clock} tone="violet"
                 kicker="REGISTROS VERIFICABLES"
                 action={
                   <Jelly
@@ -1152,6 +1156,7 @@ export default function App() {
               </div>
               <Panel
                 title="Sismos registrados"
+      icon={Table2} tone="violet"
                 kicker="USGS · EPICENTRO, DÍA, HORA Y MAGNITUD"
               >
                 <QuakeTable
@@ -1181,7 +1186,8 @@ export default function App() {
                 </p>
               </Panel>
               <div className="dashboard-middle">
-                <Panel title="Epicentros" kicker="TOCA UN PUNTO PARA VER EL DETALLE">
+                <Panel title="Epicentros"
+      icon={MapPinned} tone="violet" kicker="TOCA UN PUNTO PARA VER EL DETALLE">
                   <Suspense fallback={<div className="map-wrap quake-map skeleton" />}>
                     <QuakeMap
                       quakes={quakes}
@@ -1271,7 +1277,8 @@ export default function App() {
                 {airPanel}
               </div>
               <ModelSignals weather={weather} unit={unit} />
-              <Panel title="Pronóstico por hora" kicker="24 HORAS · HORA LOCAL">
+              <Panel title="Pronóstico por hora"
+      icon={Clock} kicker="24 HORAS · HORA LOCAL">
                 <div className="hourly-scroll">
                   {next24.map((h: any, i: number) => (
                     <div key={i}>
@@ -1289,18 +1296,21 @@ export default function App() {
                 <Stamp result={w.result} zone={zone} />
               </Panel>
               <div className="dashboard-middle">
-                <Panel title="Temperatura" kicker="PRONÓSTICO HORARIO">
+                <Panel title="Temperatura"
+      icon={Thermometer} tone="amber" kicker="PRONÓSTICO HORARIO">
                   <Suspense>
                     <Chart data={next24} unit={degree} />
                   </Suspense>
                 </Panel>
-                <Panel title="Precipitación" kicker="ACUMULADO POR HORA">
+                <Panel title="Precipitación"
+      icon={CloudRain} tone="blue" kicker="ACUMULADO POR HORA">
                   <Suspense>
                     <Chart data={next24} field="rain" unit="mm" bar />
                   </Suspense>
                 </Panel>
               </div>
-              <Panel title="Evolución del aire" kicker="US AQI · MODELO CAMS">
+              <Panel title="Evolución del aire"
+      icon={Wind} tone="mint" kicker="US AQI · MODELO CAMS">
                 <Suspense>
                   <Chart
                     data={
@@ -1323,6 +1333,7 @@ export default function App() {
               </Panel>
               <Panel
                 title="Cómo interpretar los datos"
+      icon={Info}
                 kicker="ORIGEN Y LIMITACIONES"
               >
                 <p className="explain">
@@ -1345,6 +1356,7 @@ export default function App() {
             <div className="settings-grid">
               <Panel
                 title="Tus preferencias"
+      icon={SlidersHorizontal}
                 kicker="GUARDADAS EN ESTE DISPOSITIVO"
               >
                 <div className="settings-fields">
@@ -1456,6 +1468,7 @@ export default function App() {
               <div>
                 <Panel
                   title="Avisos e instalación"
+      icon={Bell} tone="amber"
                   kicker="TÚ TIENES EL CONTROL"
                 >
                   <h3>Avisos con la aplicación abierta</h3>
@@ -1475,7 +1488,7 @@ export default function App() {
                     <Bell size={17} />
                     {settings.notify ? "Desactivar avisos" : "Activar avisos"}
                   </Jelly>
-                  <h3>Instala PR Alert Center</h3>
+                  <h3>Instala Alert Center</h3>
                   <p className="explain">
                     En iPhone: Safari → Compartir → Añadir a pantalla de inicio.
                     En Android y escritorio: usa Instalar en un navegador
@@ -1486,7 +1499,8 @@ export default function App() {
                     <Download size={17} /> Instalar aplicación
                   </Jelly>
                 </Panel>
-                <Panel title="Acerca de los datos" kicker="VERSIÓN 1.1.0">
+                <Panel title="Acerca de los datos"
+      icon={Database} tone="mint" kicker="VERSIÓN 1.2.0">
                   <p className="explain">
                     Gratis, sin cuentas ni suscripciones. Preferencias y caché
                     se guardan en tu dispositivo. Las fuentes externas reciben
@@ -1552,7 +1566,7 @@ export default function App() {
           </motion.div>
           <footer>
             <span>
-              PR ALERT CENTER <span className="footer-dot">/</span> TU ENTORNO,
+              ALERT CENTER <span className="footer-dot">/</span> TU ENTORNO,
               EN PERSPECTIVA.
             </span>
             <small>

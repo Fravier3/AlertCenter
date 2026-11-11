@@ -1,4 +1,4 @@
-name: Build, test and deploy PR Alert Center
+name: Build, test and deploy Alert Center
 on:
   push:
     branches: [main]
