@@ -10,15 +10,15 @@ export default defineConfig({
       includeAssets: ["icon.svg", "apple-touch-icon.png"],
       manifest: {
         id: "/AlertCenter/",
-        name: "PR Alert Center",
+        name: "Alert Center",
         short_name: "Alert Center",
         description:
           "Clima, alertas y actividad sísmica de Puerto Rico, Bogotá y Cundinamarca.",
         start_url: "/AlertCenter/",
         scope: "/AlertCenter/",
         display: "standalone",
-        background_color: "#080e1b",
-        theme_color: "#080e1b",
+        background_color: "#050914",
+        theme_color: "#050914",
         lang: "es",
         icons: [
           {

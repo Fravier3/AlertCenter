@@ -1,4 +1,4 @@
-# PR Alert Center
+# Alert Center
 
 PWA gratuita para Puerto Rico, Bogotá y Cundinamarca. React + TypeScript + Vite, MapLibre GL, Motion, Recharts y un service worker generado con Workbox.
 
@@ -83,3 +83,11 @@ En v1.0.8 el loop avanza cada 200 ms tras precargar los fotogramas del área vis
 - En Sismos, la lista y la cronología combinada se sustituyen por la tabla.
 
 Las secciones anteriores sobre capas del mapa, pausa manual y recorrido GPS describen versiones previas.
+
+## Alert Center, alertas en español y radar libre (v1.2.0)
+
+- La app se llama Alert Center y estrena icono (nube, sol y rayo). `node scripts/icons.mjs` regenera los PNG desde `public/icon.svg`.
+- Alertas NWS en español: el nombre del evento, la severidad, la urgencia y la certeza se traducen con un glosario propio (Warning = Aviso, Watch = Vigilancia, Advisory = Advertencia). La descripción y las instrucciones se traducen automáticamente en el navegador: primero con el traductor integrado si existe, después con MyMemory y, como último recurso, con el servicio público de Google Translate, que no es una API documentada. Solo se envía el texto público de la alerta. La traducción se guarda en el dispositivo y el original en inglés queda a un toque. Si ningún servicio responde, se muestra el original y se avisa.
+- La hora de la imagen del radar, el progreso y la escala pasan a una barra debajo del mapa. Los mapas se mueven y amplían libremente y el radar ya no se limita a la región.
+- Cambiar de sección abre siempre la página desde arriba.
+- Iconos en los encabezados de cada sección y panel.
